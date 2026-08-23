@@ -1,7 +1,6 @@
 import { useState, type ReactNode } from 'react'
-import { Github, Home, Linkedin, Moon, Sun, Search, Mail, Code2, FolderGit2 } from 'lucide-react'
+import { Github, Home, Linkedin, Search, Mail, Code2, FolderGit2 } from 'lucide-react'
 import { SITE } from '../data/content'
-import { useTheme } from '../hooks/useTheme'
 
 interface IconButtonProps {
   label: string
@@ -85,8 +84,6 @@ function LeetCodeIcon() {
 }
 
 export function Dock({ onOpenSearch }: { onOpenSearch?: () => void }) {
-  const { theme, toggleTheme } = useTheme()
-
   return (
     <aside aria-label="Quick Actions Dock" className="fixed bottom-4 sm:bottom-6 left-1/2 z-40 -translate-x-1/2">
       <nav
@@ -118,24 +115,14 @@ export function Dock({ onOpenSearch }: { onOpenSearch?: () => void }) {
           <LeetCodeIcon />
         </IconButton>
 
-        <Divider />
-
         {onOpenSearch && (
-          <IconButton label="Search & Commands (Cmd+K)" onClick={onOpenSearch}>
-            <Search size={17} strokeWidth={1.8} />
-          </IconButton>
+          <>
+            <Divider />
+            <IconButton label="Search & Commands (Cmd+K)" onClick={onOpenSearch}>
+              <Search size={17} strokeWidth={1.8} />
+            </IconButton>
+          </>
         )}
-
-        <IconButton
-          label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          onClick={toggleTheme}
-        >
-          {theme === 'dark' ? (
-            <Sun size={17} strokeWidth={1.8} className="text-[#a3ff12]" />
-          ) : (
-            <Moon size={17} strokeWidth={1.8} className="text-amber-500" />
-          )}
-        </IconButton>
       </nav>
     </aside>
   )

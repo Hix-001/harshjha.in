@@ -1,15 +1,14 @@
 import { useEffect, useRef } from 'react'
-import type { Theme } from './useTheme'
 
 /**
  * Generates an interactive dynamic SVG data URL favicon
- * based on current theme, active tab visibility, and pulse state.
+ * based on cyber-minimalist dark theme, active tab visibility, and beacon pulse.
  */
-function createFaviconSvg(theme: Theme, isVisible: boolean, pulse: boolean): string {
-  const bg = theme === 'dark' ? '#070707' : '#ffffff'
-  const border = theme === 'dark' ? '#27272a' : '#d4d4d8'
-  const primary = theme === 'dark' ? '#a3ff12' : '#65a30d'
-  const secondary = theme === 'dark' ? '#5eead4' : '#0d9488'
+function createFaviconSvg(isVisible: boolean, pulse: boolean): string {
+  const bg = '#070707'
+  const border = '#27272a'
+  const primary = '#a3ff12'
+  const secondary = '#5eead4'
   const beaconColor = isVisible ? primary : '#f59e0b'
   const pulseOpacity = pulse ? '0.9' : '0.3'
 
@@ -30,7 +29,7 @@ function createFaviconSvg(theme: Theme, isVisible: boolean, pulse: boolean): str
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
 }
 
-export function useDynamicFavicon(theme: Theme) {
+export function useDynamicFavicon() {
   const isTabVisibleRef = useRef(true)
 
   useEffect(() => {
@@ -46,7 +45,7 @@ export function useDynamicFavicon(theme: Theme) {
         document.head.appendChild(link)
       }
       link.type = 'image/svg+xml'
-      link.href = createFaviconSvg(theme, isTabVisibleRef.current, pulseState)
+      link.href = createFaviconSvg(isTabVisibleRef.current, pulseState)
     }
 
     const handleVisibilityChange = () => {
@@ -69,5 +68,5 @@ export function useDynamicFavicon(theme: Theme) {
       clearInterval(intervalId)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
-  }, [theme])
+  }, [])
 }

@@ -7,8 +7,6 @@ import {
   Mail,
   Github,
   Linkedin,
-  Sun,
-  Moon,
   ExternalLink,
   ArrowRight,
   X,
@@ -16,7 +14,6 @@ import {
   FileCode,
 } from 'lucide-react'
 import { SITE, navLinks } from '../data/content'
-import { useTheme } from '../hooks/useTheme'
 
 interface CommandItem {
   id: string
@@ -33,7 +30,6 @@ export function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [copied, setCopied] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const { theme, toggleTheme } = useTheme()
 
   const copyEmail = () => {
     navigator.clipboard.writeText(SITE.email)
@@ -68,17 +64,6 @@ export function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: 
       category: 'Actions' as const,
       icon: Mail,
       action: copyEmail,
-    },
-    {
-      id: 'action-toggle-theme',
-      title: `Toggle Theme (${theme === 'dark' ? 'Light Mode' : 'Dark Mode'})`,
-      subtitle: `Switch current theme to ${theme === 'dark' ? 'light' : 'dark'}`,
-      category: 'Actions' as const,
-      icon: theme === 'dark' ? Sun : Moon,
-      action: () => {
-        toggleTheme()
-        onClose()
-      },
     },
     {
       id: 'social-github',
@@ -116,7 +101,7 @@ export function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: 
       },
       external: true,
     },
-  ], [theme, copied])
+  ], [copied])
 
   const filteredItems = useMemo(() => {
     if (!query.trim()) return allItems

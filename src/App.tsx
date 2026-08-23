@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { ThemeProvider, useTheme } from './hooks/useTheme'
 import { useDynamicFavicon } from './hooks/useDynamicFavicon'
 import { Navbar } from './components/Navbar'
 import { Dock } from './components/Dock'
@@ -15,12 +14,11 @@ import { Highlights } from './sections/Highlights'
 import { GitHubCta } from './sections/GitHubCta'
 import { Contact } from './sections/Contact'
 
-function MainContent() {
+export default function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const { theme } = useTheme()
 
-  // Dynamically update favicon based on theme & tab activity
-  useDynamicFavicon(theme)
+  // Dynamically update favicon and tab title
+  useDynamicFavicon()
 
   // Listen for Cmd+K / Ctrl+K shortcut globally
   useEffect(() => {
@@ -42,7 +40,7 @@ function MainContent() {
   }, [])
 
   return (
-    <div className="relative min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] selection:bg-[#a3ff12]/30 selection:text-[#a3ff12]">
+    <div className="relative min-h-screen bg-[#070707] text-[#f5f5f5] selection:bg-[#a3ff12]/30 selection:text-[#a3ff12]">
       {/* Background Ambience & Noise */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-0 left-1/4 h-[500px] w-[500px] rounded-full bg-[#a3ff12]/3 blur-[140px]" />
@@ -73,13 +71,5 @@ function MainContent() {
         <CommandPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
       </div>
     </div>
-  )
-}
-
-export default function App() {
-  return (
-    <ThemeProvider>
-      <MainContent />
-    </ThemeProvider>
   )
 }
