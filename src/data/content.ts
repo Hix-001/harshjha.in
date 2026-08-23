@@ -56,7 +56,7 @@ export const skills: SkillItem[] = [
   { name: 'C++', category: 'Languages', level: 'COMFORTABLE', icon: 'cpp', description: 'STL, OOPs, Data Structures & Algorithm Design' },
   { name: 'Python', category: 'Languages', level: 'COMFORTABLE', icon: 'python', description: 'Automation, Scripting, CLI utilities & Data Logic' },
   { name: 'JavaScript (ES6+)', category: 'Languages', level: 'COMFORTABLE', icon: 'js', description: 'Async/Await, DOM, Modern Web APIs & Functional JS' },
-  { name: 'TypeScript', category: 'Languages', level: 'LEARNING', icon: 'ts', description: 'Static typing, Generics, interfaces & strict configs' },
+  { name: 'TypeScript', category: 'Languages', level: 'COMFORTABLE', icon: 'ts', description: 'Static typing, Generics, interfaces & strict configs' },
   
   { name: 'React 19', category: 'Frontend', level: 'COMFORTABLE', icon: 'react', description: 'Hooks, Custom Hooks, State Architecture & Component Patterns' },
   { name: 'Tailwind CSS', category: 'Frontend', level: 'COMFORTABLE', icon: 'tailwind', description: 'Modern responsive UI design, utility-first layout & custom themes' },
