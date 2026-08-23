@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A3FF12" />
+      <stop offset="100%" stop-color="#5EEAD4" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <style>
+    @media (prefers-color-scheme: light) {
+      .bg-panel { fill: #121212; stroke: #27272A; }
+    }
+  </style>
+  <!-- Base Squircle -->
+  <rect width="32" height="32" rx="8" class="bg-panel" fill="#070707" stroke="#27272A" stroke-width="1.5" />
+  
+  <!-- Cyber Terminal Symbol (>_) -->
+  <path d="M7 10 L14 16 L7 22" fill="none" stroke="url(#neonGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="17" y="20" width="7.5" height="2.4" rx="1.2" fill="#A3FF12" />
+  
+  <!-- Live Status Beacon -->
+  <circle cx="25" cy="7" r="2.2" fill="#A3FF12" filter="url(#glow)" />
+  <circle cx="25" cy="7" r="4" fill="none" stroke="#A3FF12" stroke-width="0.75" opacity="0.5" />
+</svg>
