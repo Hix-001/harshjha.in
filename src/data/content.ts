@@ -70,10 +70,10 @@ export const skills: SkillItem[] = [
   { name: 'Git & Version Control', category: 'Tools & DevOps', level: 'COMFORTABLE', icon: 'git', description: 'Branching, PRs, merge workflows & interactive rebase' },
   { name: 'GitHub Ecosystem', category: 'Tools & DevOps', level: 'COMFORTABLE', icon: 'github', description: 'Actions, Releases, Open Source management' },
   { name: 'VS Code & Tooling', category: 'Tools & DevOps', level: 'COMFORTABLE', icon: 'vscode', description: 'Extensions, debugging profiles, shortcuts & linters' },
-  { name: 'Figma UI/UX', category: 'Tools & DevOps', level: 'EXPLORING', icon: 'figma', description: 'Wireframing, modern typography & design system tokens' },
+  { name: 'Figma UI/UX', category: 'Tools & DevOps', level: 'LEARNING', icon: 'figma', description: 'Wireframing, modern typography & design system tokens' },
 
-  { name: 'Data Structures & Algorithms', category: 'Core CS', level: 'COMFORTABLE', icon: 'design', description: 'Arrays, Trees, Graphs, Dynamic Programming & Complexity' },
-  { name: 'System Design Basics', category: 'Core CS', level: 'EXPLORING', icon: 'design', description: 'Client-server architecture, caching, load balancing & scalability' },
+  { name: 'Data Structures & Algorithms', category: 'Core CS', level: 'LEARNING', icon: 'design', description: 'Arrays, Trees, Graphs, Dynamic Programming & Complexity' },
+  { name: 'System Design Basics', category: 'Core CS', level: 'LEARNING', icon: 'design', description: 'Client-server architecture, caching, load balancing & scalability' },
   { name: 'Operating Systems & DBMS', category: 'Core CS', level: 'LEARNING', icon: 'node', description: 'Memory management, processes, concurrency & ACID principles' },
 ]
 
