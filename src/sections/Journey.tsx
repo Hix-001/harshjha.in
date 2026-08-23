@@ -7,7 +7,7 @@ export function Journey() {
   const { ref, isInView } = useInViewAnimation()
 
   return (
-    <section id="journey" className="border-t border-[#27272a] bg-[#0d0d0d] py-20 md:py-28">
+    <section id="journey" className="border-t border-[#27272a] bg-[#0d0d0d] py-20 md:py-28 scroll-mt-20">
       <div ref={ref} className="mx-auto max-w-6xl px-5 md:px-8">
         <div className={isInView ? 'fade-in-up' : 'opacity-0'}>
           <SectionHeading

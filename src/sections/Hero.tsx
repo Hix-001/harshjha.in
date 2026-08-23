@@ -14,7 +14,7 @@ const floatLabels = [
 
 export function Hero() {
   return (
-    <section id="home" className="relative overflow-hidden pt-28 sm:pt-36 pb-16 md:pb-24">
+    <section id="home" className="relative overflow-hidden pt-28 sm:pt-36 pb-16 md:pb-24 scroll-mt-20">
       {/* Background Grids & Glow */}
       <div className="pointer-events-none absolute inset-0 grid-bg opacity-35" aria-hidden />
       <div className="pointer-events-none absolute left-1/2 top-20 h-96 w-96 -translate-x-1/2 rounded-full bg-[#a3ff12]/8 blur-[120px]" aria-hidden />

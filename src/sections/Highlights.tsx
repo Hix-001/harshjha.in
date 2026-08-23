@@ -9,7 +9,7 @@ export function Highlights() {
   const { ref, isInView } = useInViewAnimation()
 
   return (
-    <section id="highlights" className="border-t border-[#27272a] py-20 md:py-28 bg-[#070707]">
+    <section id="highlights" className="border-t border-[#27272a] py-20 md:py-28 bg-[#070707] scroll-mt-20">
       <div ref={ref} className="mx-auto max-w-6xl px-5 md:px-8">
         <div className={isInView ? 'fade-in-up' : 'opacity-0'}>
           <SectionHeading

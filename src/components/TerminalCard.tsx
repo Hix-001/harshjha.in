@@ -38,8 +38,9 @@ export function TerminalCard({
   ])
   const [cmdHistoryIdx, setCmdHistoryIdx] = useState<number | null>(null)
   const [pastCommands, setPastCommands] = useState<string[]>(['cat status.json'])
-  const outputEndRef = useRef<HTMLDivElement>(null)
+  const terminalBodyRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const isFirstMount = useRef(true)
 
   const handleCommand = (rawCmd: string) => {
     const trimmed = rawCmd.trim()
@@ -106,9 +107,14 @@ export function TerminalCard({
     }
   }
 
+  // Scroll only the terminal box inner container, NEVER the browser window
   useEffect(() => {
-    if (interactive) {
-      outputEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (isFirstMount.current) {
+      isFirstMount.current = false
+      return
+    }
+    if (interactive && terminalBodyRef.current) {
+      terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight
     }
   }, [history, interactive])
 
@@ -140,6 +146,7 @@ export function TerminalCard({
       {/* Body */}
       {interactive ? (
         <div
+          ref={terminalBodyRef}
           className="flex flex-col p-4 sm:p-5 font-mono text-xs sm:text-sm text-[#f5f5f5] min-h-[290px] max-h-[360px] overflow-y-auto"
           onClick={() => inputRef.current?.focus()}
         >
@@ -178,7 +185,6 @@ export function TerminalCard({
                 </div>
               </div>
             ))}
-            <div ref={outputEndRef} />
           </div>
 
           {/* Input Prompt */}

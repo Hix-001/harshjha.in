@@ -34,6 +34,13 @@ function MainContent() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
+  // Ensure fresh page load starts cleanly at the top hero section if no hash is present
+  useEffect(() => {
+    if (!window.location.hash) {
+      window.scrollTo(0, 0)
+    }
+  }, [])
+
   return (
     <div className="relative min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] selection:bg-[#a3ff12]/30 selection:text-[#a3ff12]">
       {/* Background Ambience & Noise */}

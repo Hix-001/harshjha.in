@@ -9,7 +9,7 @@ export function About() {
   const [selectedFocus, setSelectedFocus] = useState<FocusAreaItem | null>(null)
 
   return (
-    <section id="about" className="border-t border-[#27272a] bg-[#0d0d0d] py-20 md:py-28">
+    <section id="about" className="border-t border-[#27272a] bg-[#0d0d0d] py-20 md:py-28 scroll-mt-20">
       <div
         ref={ref}
         className={`mx-auto grid max-w-6xl gap-12 px-5 md:grid-cols-12 md:px-8 ${
