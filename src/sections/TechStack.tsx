@@ -34,8 +34,8 @@ export function TechStack() {
           />
 
           {/* Category Filter Pills */}
-          <div className="mt-8 flex flex-wrap items-center gap-2 pb-2">
-            <span className="mr-1 inline-flex items-center gap-1.5 font-mono text-xs text-[#71717a]">
+          <div className="mt-8 flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 sm:flex-wrap">
+            <span className="mr-1 inline-flex shrink-0 items-center gap-1.5 font-mono text-xs text-[#71717a]">
               <Filter size={13} className="text-[#a3ff12]" /> Filter:
             </span>
             {categories.map((cat) => {
@@ -46,7 +46,7 @@ export function TechStack() {
                   key={cat}
                   type="button"
                   onClick={() => setActiveCategory(cat)}
-                  className={`rounded-full border px-3 py-1.5 font-mono text-xs transition-all active:scale-95 ${
+                  className={`shrink-0 rounded-full border px-3 py-1.5 font-mono text-xs transition-all active:scale-95 whitespace-nowrap ${
                     isActive
                       ? 'border-[#a3ff12] bg-[#a3ff12]/10 text-[#a3ff12]'
                       : 'border-[#27272a] bg-[#121212] text-[#a1a1aa] hover:border-[#3f3f46] hover:text-[#f5f5f5]'

@@ -31,7 +31,7 @@ export function Hero() {
             <span className="text-[#a3ff12]">{SITE.status}</span>
           </div>
 
-          <h1 className="mt-6 text-4xl font-medium leading-[1.08] text-[#f5f5f5] sm:text-5xl lg:text-6xl">
+          <h1 className="mt-6 text-3xl font-medium leading-[1.12] text-[#f5f5f5] sm:text-5xl lg:text-6xl">
             Building software with <span className="text-[#a3ff12]">precision</span> &amp; curious{' '}
             <span className="text-[#5eead4]">engineering</span>.
           </h1>
@@ -45,30 +45,30 @@ export function Hero() {
           </p>
 
           {/* Action Buttons */}
-          <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
-            <Button href="#projects">
+          <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+            <Button href="#projects" className="w-full sm:w-auto justify-center">
               <FolderGit2 size={16} />
               View Featured Projects
             </Button>
-            <Button href="#contact" variant="secondary">
+            <Button href="#contact" variant="secondary" className="w-full sm:w-auto justify-center">
               <Mail size={16} />
               Get in Touch
             </Button>
           </div>
 
           {/* Key Metrics Quick Row */}
-          <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-[#27272a] pt-6 font-mono text-[11px]">
+          <dl className="mt-10 grid grid-cols-3 gap-2 sm:gap-4 border-t border-[#27272a] pt-6 font-mono text-[10px] sm:text-[11px]">
             <div>
-              <dt className="text-[#71717a] uppercase tracking-wider">Location</dt>
-              <dd className="mt-1 text-[#f5f5f5] font-medium">{SITE.location}</dd>
+              <dt className="text-[#71717a] uppercase tracking-wider text-[9px] sm:text-[10px]">Location</dt>
+              <dd className="mt-1 text-[#f5f5f5] font-medium truncate">{SITE.location}</dd>
             </div>
             <div>
-              <dt className="text-[#71717a] uppercase tracking-wider">Education</dt>
-              <dd className="mt-1 text-[#f5f5f5] font-medium">B.Tech CSE (Year 2)</dd>
+              <dt className="text-[#71717a] uppercase tracking-wider text-[9px] sm:text-[10px]">Education</dt>
+              <dd className="mt-1 text-[#f5f5f5] font-medium truncate">B.Tech CSE (Yr 2)</dd>
             </div>
             <div>
-              <dt className="text-[#71717a] uppercase tracking-wider">Core Stack</dt>
-              <dd className="mt-1 text-[#a3ff12] font-medium">React · C++ · TS</dd>
+              <dt className="text-[#71717a] uppercase tracking-wider text-[9px] sm:text-[10px]">Core Stack</dt>
+              <dd className="mt-1 text-[#a3ff12] font-medium truncate">React · C++ · TS</dd>
             </div>
           </dl>
         </div>

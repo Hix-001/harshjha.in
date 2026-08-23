@@ -15,14 +15,14 @@ function IconButton({ label, children, href, onClick, active }: IconButtonProps)
 
   const content = (
     <div className="relative flex items-center justify-center">
-      {/* Tooltip */}
+      {/* Tooltip (Desktop only) */}
       {isHovered && (
-        <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-[#27272a] bg-[#121212] px-2 py-0.5 font-mono text-[10px] tracking-wide text-[#f5f5f5] shadow-lg">
+        <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-[#27272a] bg-[#121212] px-2 py-0.5 font-mono text-[10px] tracking-wide text-[#f5f5f5] shadow-lg hidden sm:block">
           {label}
         </span>
       )}
       <div
-        className={`focus-ring flex size-9 sm:size-10 items-center justify-center rounded-full text-[#f5f5f5] transition-all duration-200 hover:scale-110 hover:bg-white/10 active:scale-95 ${
+        className={`focus-ring flex size-10 items-center justify-center rounded-full text-[#f5f5f5] transition-all duration-200 hover:scale-110 hover:bg-white/10 active:scale-90 ${
           active ? 'bg-[#a3ff12]/15 text-[#a3ff12]' : ''
         }`}
       >
@@ -65,7 +65,7 @@ function Divider() {
 
 function LeetCodeIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden>
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden>
       <path
         d="M15.2 3.4 8.1 10.5a3.2 3.2 0 0 0 0 4.5l7.1 7.1"
         stroke="currentColor"
@@ -85,44 +85,65 @@ function LeetCodeIcon() {
 
 export function Dock({ onOpenSearch }: { onOpenSearch?: () => void }) {
   return (
-    <aside aria-label="Quick Actions Dock" className="fixed bottom-4 sm:bottom-6 left-1/2 z-40 -translate-x-1/2">
+    <aside
+      aria-label="Quick Actions Dock"
+      className="fixed bottom-3 sm:bottom-6 left-1/2 z-40 -translate-x-1/2 max-w-[95vw]"
+    >
       <nav
         aria-label="Quick navigation"
-        className="glass-panel flex items-center gap-0.5 rounded-full px-2.5 py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.55)] transition-all"
+        className="glass-panel flex items-center rounded-full p-1.5 sm:px-2.5 sm:py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.65)] transition-all"
       >
-        <IconButton href="#home" label="Home">
-          <Home size={17} strokeWidth={1.8} />
-        </IconButton>
-        <IconButton href="#projects" label="Projects">
-          <FolderGit2 size={17} strokeWidth={1.8} />
-        </IconButton>
-        <IconButton href="#skills" label="Skills">
-          <Code2 size={17} strokeWidth={1.8} />
-        </IconButton>
-        <IconButton href="#contact" label="Contact">
-          <Mail size={17} strokeWidth={1.8} />
-        </IconButton>
+        {/* Mobile View: Exclusively GitHub, LinkedIn, and LeetCode */}
+        <div className="flex items-center gap-1 sm:hidden">
+          <IconButton href={SITE.github} label="GitHub">
+            <Github size={18} strokeWidth={1.8} />
+          </IconButton>
+          <Divider />
+          <IconButton href={SITE.linkedin} label="LinkedIn">
+            <Linkedin size={18} strokeWidth={1.8} />
+          </IconButton>
+          <Divider />
+          <IconButton href={SITE.leetcode} label="LeetCode">
+            <LeetCodeIcon />
+          </IconButton>
+        </div>
 
-        <Divider />
+        {/* Tablet & Desktop View: Complete Dock */}
+        <div className="hidden sm:flex sm:items-center sm:gap-0.5">
+          <IconButton href="#home" label="Home">
+            <Home size={17} strokeWidth={1.8} />
+          </IconButton>
+          <IconButton href="#projects" label="Projects">
+            <FolderGit2 size={17} strokeWidth={1.8} />
+          </IconButton>
+          <IconButton href="#skills" label="Skills">
+            <Code2 size={17} strokeWidth={1.8} />
+          </IconButton>
+          <IconButton href="#contact" label="Contact">
+            <Mail size={17} strokeWidth={1.8} />
+          </IconButton>
 
-        <IconButton href={SITE.github} label="GitHub">
-          <Github size={17} strokeWidth={1.8} />
-        </IconButton>
-        <IconButton href={SITE.linkedin} label="LinkedIn">
-          <Linkedin size={17} strokeWidth={1.8} />
-        </IconButton>
-        <IconButton href={SITE.leetcode} label="LeetCode">
-          <LeetCodeIcon />
-        </IconButton>
+          <Divider />
 
-        {onOpenSearch && (
-          <>
-            <Divider />
-            <IconButton label="Search & Commands (Cmd+K)" onClick={onOpenSearch}>
-              <Search size={17} strokeWidth={1.8} />
-            </IconButton>
-          </>
-        )}
+          <IconButton href={SITE.github} label="GitHub">
+            <Github size={17} strokeWidth={1.8} />
+          </IconButton>
+          <IconButton href={SITE.linkedin} label="LinkedIn">
+            <Linkedin size={17} strokeWidth={1.8} />
+          </IconButton>
+          <IconButton href={SITE.leetcode} label="LeetCode">
+            <LeetCodeIcon />
+          </IconButton>
+
+          {onOpenSearch && (
+            <>
+              <Divider />
+              <IconButton label="Search & Commands (Cmd+K)" onClick={onOpenSearch}>
+                <Search size={17} strokeWidth={1.8} />
+              </IconButton>
+            </>
+          )}
+        </div>
       </nav>
     </aside>
   )

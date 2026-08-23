@@ -32,22 +32,22 @@ export function Contact() {
           />
 
           {/* Quick Copy Email Box */}
-          <div className="mt-8 rounded-2xl border border-[#27272a] bg-[#121212] p-5 shadow-lg">
-            <div className="flex items-center justify-between gap-3">
+          <div className="mt-8 rounded-2xl border border-[#27272a] bg-[#121212] p-4 sm:p-5 shadow-lg">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">
                 <div className="flex size-10 items-center justify-center rounded-xl bg-[#a3ff12]/10 border border-[#a3ff12]/20 text-[#a3ff12] shrink-0">
                   <Mail size={18} />
                 </div>
                 <div className="min-w-0 truncate">
                   <p className="font-mono text-[10px] text-[#71717a] uppercase tracking-wider">Direct Email</p>
-                  <p className="font-mono text-sm font-medium text-white truncate">{SITE.email}</p>
+                  <p className="font-mono text-xs sm:text-sm font-medium text-white truncate">{SITE.email}</p>
                 </div>
               </div>
 
               <button
                 type="button"
                 onClick={handleCopyEmail}
-                className="focus-ring flex items-center gap-1.5 rounded-lg border border-[#27272a] bg-[#171717] px-3 py-2 font-mono text-xs text-[#a1a1aa] transition-all hover:border-[#a3ff12] hover:text-[#a3ff12] active:scale-95 shrink-0"
+                className="focus-ring flex items-center justify-center gap-1.5 rounded-lg border border-[#27272a] bg-[#171717] px-3 py-2 font-mono text-xs text-[#a1a1aa] transition-all hover:border-[#a3ff12] hover:text-[#a3ff12] active:scale-95 w-full sm:w-auto shrink-0"
                 aria-label="Copy email address"
               >
                 {copied ? (

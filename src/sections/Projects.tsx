@@ -31,13 +31,13 @@ export function Projects() {
 
           {/* Filter Bar */}
           <div className="mt-8 flex flex-wrap items-center justify-between gap-4 pb-2">
-            <div className="flex flex-wrap gap-2">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar max-w-full pb-1 sm:flex-wrap">
               {filterOptions.map((opt) => (
                 <button
                   key={opt}
                   type="button"
                   onClick={() => setSelectedFilter(opt)}
-                  className={`rounded-full border px-3 py-1.5 font-mono text-xs transition-all active:scale-95 ${
+                  className={`shrink-0 rounded-full border px-3 py-1.5 font-mono text-xs transition-all active:scale-95 whitespace-nowrap ${
                     selectedFilter === opt
                       ? 'border-[#a3ff12] bg-[#a3ff12]/10 text-[#a3ff12]'
                       : 'border-[#27272a] bg-[#121212] text-[#a1a1aa] hover:border-[#3f3f46] hover:text-[#f5f5f5]'

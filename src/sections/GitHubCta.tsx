@@ -31,14 +31,14 @@ function ContributionGrid() {
   return (
     <div className="space-y-2">
       <div
-        className="grid grid-flow-col grid-rows-7 gap-1.5 overflow-x-auto p-1"
+        className="grid grid-flow-col grid-rows-7 gap-1.5 overflow-x-auto p-1 touch-pan-x no-scrollbar"
         role="img"
         aria-label="GitHub style contribution heat matrix"
       >
         {cells.map((color, i) => (
           <span
             key={i}
-            className="size-3 rounded-[3px] transition-transform hover:scale-125"
+            className="size-3 rounded-[3px] transition-transform hover:scale-125 shrink-0"
             style={{ backgroundColor: color }}
             title={`Active Contribution Day ${i + 1}`}
           />
@@ -72,12 +72,12 @@ export function GitHubCta() {
           <p className="mt-4 text-sm leading-relaxed text-[#a1a1aa]">
             I maintain repositories covering algorithm experiments, developer utilities, and web engineering sandboxes. Follow my journey, inspect the code, or submit an issue/PR.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button href={SITE.github} target="_blank" rel="noopener noreferrer">
+          <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <Button href={SITE.github} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto justify-center">
               <Github size={16} />
               Visit github.com/Hix-001
             </Button>
-            <Button href="#projects" variant="secondary">
+            <Button href="#projects" variant="secondary" className="w-full sm:w-auto justify-center">
               Explore Portfolio Projects
             </Button>
           </div>

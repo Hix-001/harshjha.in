@@ -118,7 +118,7 @@ export function About() {
           aria-label={selectedFocus.title}
         >
           <div
-            className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-[#27272a] bg-[#121212] p-6 shadow-2xl shadow-black/80"
+            className="relative w-full max-w-lg max-h-[88vh] overflow-y-auto rounded-2xl border border-[#27272a] bg-[#121212] p-5 sm:p-6 shadow-2xl shadow-black/80"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
