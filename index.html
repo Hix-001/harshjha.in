@@ -1,23 +1,447 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Harsh Jha — 2nd year CSE student. Building, breaking, and learning through code."
-    />
-    <title>Harsh Jha — CSE Student & Developer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Harsh Jha — 2nd Year CSE Student & Developer</title>
+  <meta name="description" content="Portfolio of Harsh Jha, a 2nd year Computer Science and Engineering undergraduate passionate about Full-Stack Web Development, 3D Web Experiences, Systems, and AI.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' fill='none'%3E%3Crect width='40' height='40' rx='10' fill='%23070a0e' stroke='rgba(223,231,224,0.14)' stroke-width='1.2'/%3E%3Ccircle cx='20' cy='20' r='11' fill='%23e0231c' fill-opacity='0.92'/%3E%3Cpath d='M13 10.5V29.5' stroke='%23dfe7e0' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M27 10.5V29.5' stroke='%23dfe7e0' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M10.5 13.5C16.5 12 23.5 12 29.5 13.5' stroke='%23dfe7e0' stroke-width='1.8' stroke-linecap='round'/%3E%3Cpath d='M13 20H27' stroke='%23dfe7e0' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M11.5 27H28.5' stroke='%23dfe7e0' stroke-width='1.4' stroke-linecap='round' stroke-opacity='0.6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/secret-pathways-assets/fonts.css">
+  <link rel="stylesheet" href="/src/style.css">
+  <script src="/secret-pathways-assets/three.min.js"></script>
+</head>
+<body class="is-locked">
+  <!-- Three.js live background viewport -->
+  <canvas id="gl"></canvas>
+  <div id="grain"></div>
+  <div id="vignette"></div>
+  <div class="cur-dot" id="cursor"></div>
+
+  <!-- Preloader -->
+  <div id="pre" role="dialog" aria-label="Loading experience">
+    <div class="pre-in">
+      <div class="pre-mark">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="40" height="40" rx="10" fill="#070a0e" stroke="rgba(223,231,224,0.14)" stroke-width="1.2"/>
+  <circle cx="20" cy="20" r="11" fill="#e0231c" fill-opacity="0.92"/>
+  <!-- Torii-inspired Calligraphic H -->
+  <path d="M13 10.5V29.5" stroke="#dfe7e0" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M27 10.5V29.5" stroke="#dfe7e0" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M10.5 13.5C16.5 12 23.5 12 29.5 13.5" stroke="#dfe7e0" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M13 20H27" stroke="#dfe7e0" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M11.5 27H28.5" stroke="#dfe7e0" stroke-width="1.4" stroke-linecap="round" stroke-opacity="0.6"/>
+</svg>
+      </div>
+      <div class="pre-jp jp">情報科学技術 · HARSH JHA</div>
+      <div class="pre-bar"><i id="pre-fill"></i></div>
+      <div class="pre-meta">
+        <span id="pre-task">Initializing 3D World</span>
+        <b><span id="pre-pct">0</span>%</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation -->
+  <header class="nav" id="nav">
+    <a href="#top" class="brand" aria-label="Harsh Jha Portfolio">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="40" height="40" rx="10" fill="#070a0e" stroke="rgba(223,231,224,0.14)" stroke-width="1.2"/>
+  <circle cx="20" cy="20" r="11" fill="#e0231c" fill-opacity="0.92"/>
+  <!-- Torii-inspired Calligraphic H -->
+  <path d="M13 10.5V29.5" stroke="#dfe7e0" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M27 10.5V29.5" stroke="#dfe7e0" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M10.5 13.5C16.5 12 23.5 12 29.5 13.5" stroke="#dfe7e0" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M13 20H27" stroke="#dfe7e0" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M11.5 27H28.5" stroke="#dfe7e0" stroke-width="1.4" stroke-linecap="round" stroke-opacity="0.6"/>
+</svg>
+      <span class="brand-tx">
+        <b>HARSH JHA</b>
+        <i>2ND YEAR CSE · DEVELOPER</i>
+      </span>
+    </a>
+    <nav class="nav-links" id="nav-menu">
+      <a href="#gate" class="nav-link" data-nav="1">
+        <span>About</span>
+        <span class="alt">01//ABOUT</span>
+      </a>
+      <a href="#pathways" class="nav-link" data-nav="2">
+        <span>Projects</span>
+        <span class="alt">02//WORKS</span>
+      </a>
+      <a href="#lessons" class="nav-link" data-nav="3">
+        <span>Skills</span>
+        <span class="alt">03//STACK</span>
+      </a>
+      <a href="#eternity" class="nav-link" data-nav="4">
+        <span>Contact</span>
+        <span class="alt">04//CONNECT</span>
+      </a>
+    </nav>
+    <button class="nav-burger" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <i></i><i></i>
+    </button>
+  </header>
+
+  <!-- Progress rail -->
+  <div id="fg-sky" aria-hidden="true"></div>
+  <aside class="rail" id="rail" aria-hidden="true"></aside>
+
+  <!-- Page Document Flow -->
+  <div class="page">
+
+    <!-- 00 · Hero Section -->
+    <section class="hero" id="hero" data-cam="0">
+      <div class="hero-top">
+        <div class="eyebrow" data-rv="fade">
+          <span class="dot"></span>
+          <span>B.Tech CSE Undergraduate // Portfolio 2026</span>
+        </div>
+        <h1 class="display h-hero">
+          <span class="mask-line"><span>Where Logic Meets</span></span>
+          <span class="mask-line"><span>Digital Stillness &</span></span>
+          <span class="mask-line"><span>Clean Engineering</span></span>
+        </h1>
+        <p class="body-lg hero-sub" data-rv="up">
+          I'm <strong>Harsh Jha</strong>, a 2nd year Computer Science & Engineering student building modern full-stack systems, interactive 3D WebGL experiences, and robust algorithmic architectures.
+        </p>
+      </div>
+
+      <!-- Floating peek card -->
+      <a href="#pathways" class="peek" aria-label="View featured projects">
+        <span class="peek-fr"></span>
+        <span class="peek-play">
+          <svg viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="23" cy="23" r="22" stroke="rgba(223,231,224,0.3)" stroke-width="1.2"/>
+            <polygon points="19,15 31,23 19,31" fill="#dfe7e0"/>
+          </svg>
+        </span>
+        <span class="peek-cap">
+          <b>FEATURED BUILDS</b>
+          <i>EXPLORE</i>
+        </span>
+      </a>
+
+      <div class="hero-side" aria-hidden="true">
+        <span class="v jp">情報科学技術 · 開発者</span>
+      </div>
+
+      <div class="hero-spacer"></div>
+
+      <!-- Hero Footer Index -->
+      <div class="hero-foot">
+        <div class="hero-cue">
+          <span>Scroll to traverse</span>
+          <span class="track"><i></i></span>
+        </div>
+        <nav class="chapters" aria-label="Portfolio sections">
+          <div class="chip" data-goto="1">
+            <span class="num">01</span>
+            <span class="tx">
+              <b>About Me</b>
+              <p>Foundations & Academic Journey</p>
+            </span>
+          </div>
+          <div class="chip" data-goto="2">
+            <span class="num">02</span>
+            <span class="tx">
+              <b>Projects</b>
+              <p>Full-Stack & WebGL Systems</p>
+            </span>
+          </div>
+          <div class="chip" data-goto="3">
+            <span class="num">03</span>
+            <span class="tx">
+              <b>Tech Stack</b>
+              <p>Languages & Core CS Tools</p>
+            </span>
+          </div>
+          <div class="chip" data-goto="4">
+            <span class="num">04</span>
+            <span class="tx">
+              <b>Connect</b>
+              <p>Collaborations & Inquiries</p>
+            </span>
+          </div>
+        </nav>
+      </div>
+    </section>
+
+    <!-- 01 · Chapter I: About Me -->
+    <section class="sec" id="gate" data-cam="1">
+      <div class="sec-head">
+        <span class="k"><b>01</b> / ABOUT ME</span>
+        <span class="rule"></span>
+        <span class="k jp">探求心 · THE APPROACH</span>
+      </div>
+      <div class="gate-grid">
+        <div>
+          <h2 class="display h-sec" data-rv="up">
+            Curiosity-driven Engineering with Precision
+          </h2>
+        </div>
+        <div class="gate-copy">
+          <p class="lead" data-rv="up">
+            As a 2nd year Computer Science & Engineering undergraduate, I immerse myself in the fundamentals of computing — combining theoretical rigor with hands-on modern software creation.
+          </p>
+          <p class="body" data-rv="up">
+            From mastering Data Structures & Algorithms and Object-Oriented paradigms to designing intuitive full-stack web applications and WebGL interactive shaders, I strive for clean, maintainable code and exceptional user experience.
+          </p>
+          <p class="body" data-rv="up">
+            Whether architecting scalable backend APIs, optimizing rendering pipelines, or tackling competitive algorithmic challenges, I am constantly learning, shipping, and refining my technical craft.
+          </p>
+          <a href="https://github.com" target="_blank" rel="noreferrer" class="arrowlink" data-rv="up">
+            <span>Explore GitHub Profile</span>
+            <span class="ar">
+              <svg viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.5 10.5L10.5 2.5M10.5 2.5H4.5M10.5 2.5V8.5" stroke="#dfe7e0" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </a>
+        </div>
+      </div>
+      <div class="gate-stats" data-rv="up">
+        <div>
+          <b class="num">2ND YR</b>
+          <span>CSE Undergraduate</span>
+        </div>
+        <div>
+          <b class="num">15+</b>
+          <span>Projects & Builds</span>
+        </div>
+        <div>
+          <b class="num">DSA & OOP</b>
+          <span>Core Foundations</span>
+        </div>
+        <div>
+          <b class="num">OPEN SOURCE</b>
+          <span>Continuous Learner</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 · Chapter II: Featured Projects -->
+    <section class="sec" id="pathways" data-cam="2">
+      <div class="sec-head">
+        <span class="k"><b>02</b> / SELECTED WORKS</span>
+        <span class="rule"></span>
+        <span class="k jp">制作物 · FEATURED BUILDS</span>
+      </div>
+      <div class="cards">
+        <!-- Project 1 -->
+        <article class="card" data-rv="up">
+          <div class="card-fr">
+            <span class="glow" style="--gx:65%; --gy:32%; --gr:24px; --gc1:#ff5a3c; --gc2:#e0231c; --gt:4.2s; --gt2:5.8s"></span>
+            <div class="card-lab">
+              <div>
+                <b>Nexus Workspace</b>
+                <div class="card-meta">Full-Stack Web App · React / Node / Postgres</div>
+              </div>
+              <span class="jp">全体構築</span>
+            </div>
+            <span class="card-ar">
+              <svg viewBox="0 0 26 26" fill="none">
+                <circle cx="13" cy="13" r="12" stroke="#dfe7e0" stroke-width="1"/>
+                <path d="M9 17L17 9M17 9H11M17 9V15" stroke="#dfe7e0" stroke-width="1.4"/>
+              </svg>
+            </span>
+          </div>
+          <div class="card-meta">
+            <span>Collaborative Realtime Workspace</span>
+            <span>2026</span>
+          </div>
+        </article>
+
+        <!-- Project 2 -->
+        <article class="card" data-rv="up">
+          <div class="card-fr">
+            <span class="glow glow--flame" style="--gx:50%; --gy:68%; --gr:22px; --gc1:#ffba42; --gc2:#e0231c; --gt:2.6s; --gt2:3.8s"></span>
+            <div class="card-lab">
+              <div>
+                <b>AI Code Mentor</b>
+                <div class="card-meta">AI Tool · Python / Gemini / Fastify</div>
+              </div>
+              <span class="jp">人工知能</span>
+            </div>
+            <span class="card-ar">
+              <svg viewBox="0 0 26 26" fill="none">
+                <circle cx="13" cy="13" r="12" stroke="#dfe7e0" stroke-width="1"/>
+                <path d="M9 17L17 9M17 9H11M17 9V15" stroke="#dfe7e0" stroke-width="1.4"/>
+              </svg>
+            </span>
+          </div>
+          <div class="card-meta">
+            <span>Contextual Syntax & Logic Assistant</span>
+            <span>2026</span>
+          </div>
+        </article>
+
+        <!-- Project 3 -->
+        <article class="card" data-rv="up">
+          <div class="card-fr">
+            <span class="glow" style="--gx:44%; --gy:28%; --gr:28px; --gc1:#ff4a36; --gc2:#b81410; --gt:5.1s; --gt2:7.2s"></span>
+            <div class="card-lab">
+              <div>
+                <b>Chrono 3D Engine</b>
+                <div class="card-meta">Creative Dev · Three.js / WebGL / GLSL</div>
+              </div>
+              <span class="jp">空間表現</span>
+            </div>
+            <span class="card-ar">
+              <svg viewBox="0 0 26 26" fill="none">
+                <circle cx="13" cy="13" r="12" stroke="#dfe7e0" stroke-width="1"/>
+                <path d="M9 17L17 9M17 9H11M17 9V15" stroke="#dfe7e0" stroke-width="1.4"/>
+              </svg>
+            </span>
+          </div>
+          <div class="card-meta">
+            <span>Procedural Shaders & Audio Atmospheres</span>
+            <span>2025</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 03 · Chapter III: Skills & Tech Stack -->
+    <section class="sec" id="lessons" data-cam="3">
+      <div class="sec-head">
+        <span class="k"><b>03</b> / TECHNICAL REPERTOIRE</span>
+        <span class="rule"></span>
+        <span class="k jp">技術体系 · STACK & SKILLS</span>
+      </div>
+      <div class="cur-head">
+        <h2 class="display h-sec" data-rv="up">
+          Languages, Tools & Foundations
+        </h2>
+        <p class="body" data-rv="up">
+          A disciplined stack bridging low-level computational efficiency with expressive modern web technologies and robust backend systems.
+        </p>
+      </div>
+      <div class="cur" data-rv="up">
+        <!-- Skill 1 -->
+        <div class="les">
+          <span class="k">01</span>
+          <div>
+            <h3>Programming Languages <em>基盤言語</em></h3>
+            <p>C++, Java, Python, JavaScript (ES6+), TypeScript, SQL</p>
+          </div>
+          <p>Strong focus on memory awareness, object-oriented design, algorithmic efficiency, and typed web development.</p>
+          <span class="t">Core Languages</span>
+          <span class="bar"></span>
+        </div>
+
+        <!-- Skill 2 -->
+        <div class="les">
+          <span class="k">02</span>
+          <div>
+            <h3>Frontend & 3D Web <em>視覚表現</em></h3>
+            <p>React, Next.js, Three.js, WebGL, TailwindCSS, HTML5/CSS3</p>
+          </div>
+          <p>Crafting responsive, immersive, accessible, and high-framerate interfaces with custom shaders and fluid animations.</p>
+          <span class="t">Frontend & WebGL</span>
+          <span class="bar"></span>
+        </div>
+
+        <!-- Skill 3 -->
+        <div class="les">
+          <span class="k">03</span>
+          <div>
+            <h3>Backend & Database Systems <em>構造と記憶</em></h3>
+            <p>Node.js, Express, PostgreSQL, MongoDB, Redis, REST APIs</p>
+          </div>
+          <p>Architecting reliable microservices, database schemas, state caching, and secure authentication flows.</p>
+          <span class="t">Backend Architecture</span>
+          <span class="bar"></span>
+        </div>
+
+        <!-- Skill 4 -->
+        <div class="les">
+          <span class="k">04</span>
+          <div>
+            <h3>CS Foundations & DevOps <em>体系と道具</em></h3>
+            <p>DSA, OOP, OS, DBMS, Computer Networks, Git/GitHub, Linux, Docker</p>
+          </div>
+          <p>Rigorous computational fundamentals, version control workflows, containerization, and systematic problem solving.</p>
+          <span class="t">Foundations & Tools</span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 · Chapter IV: Contact & Closing -->
+    <section class="sec fin" id="eternity" data-cam="4">
+      <div class="eyebrow" data-rv="fade">
+        <span class="jp">対話と創造 · GET IN TOUCH</span>
+      </div>
+      <h2 class="display" data-rv="up">
+        Let's Build Something Remarkable
+      </h2>
+      <p class="body-lg" data-rv="up">
+        I am currently seeking software engineering internships, collaborative development projects, and research opportunities. Let's connect and create impactful technology together.
+      </p>
+      <a href="mailto:contact.harshjha@example.com" class="cta" data-rv="up">
+        <i></i>
+        <span>Send An Email</span>
+        <svg viewBox="0 0 13 13" fill="none" width="13" height="13">
+          <path d="M2.5 10.5L10.5 2.5M10.5 2.5H4.5M10.5 2.5V8.5" stroke="#dfe7e0" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </section>
+
+    <!-- 05 · Footer -->
+    <footer class="foot" data-cam="5">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <div class="foot-title">
+            <b>HARSH JHA</b>
+            <span class="jp">情報科学技術 · 学部生</span>
+          </div>
+          <p>2nd Year Computer Science & Engineering undergraduate focusing on full-stack web architectures, 3D WebGL graphics, and computational systems.</p>
+          <div class="foot-status">
+            <span class="status-dot"></span>
+            <span>Available for Internships & Projects</span>
+          </div>
+        </div>
+        <div>
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="#hero">00 // Home</a></li>
+            <li><a href="#gate">01 // About</a></li>
+            <li><a href="#pathways">02 // Projects</a></li>
+            <li><a href="#lessons">03 // Skills</a></li>
+            <li><a href="#eternity">04 // Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Socials</h4>
+          <ul>
+            <li><a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a></li>
+            <li><a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a></li>
+            <li><a href="https://twitter.com" target="_blank" rel="noreferrer">Twitter / X</a></li>
+            <li><a href="mailto:contact.harshjha@example.com">Email</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Focus Domains</h4>
+          <ul>
+            <li><a href="#pathways">Full-Stack Development</a></li>
+            <li><a href="#pathways">3D Web & WebGL Graphics</a></li>
+            <li><a href="#lessons">Data Structures & Algos</a></li>
+            <li><a href="#lessons">Systems & Databases</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-base">
+        <span>© 2026 HARSH JHA. ALL RIGHTS RESERVED.</span>
+        <span class="jp">知識 · 創造 · 技術</span>
+        <span>RENDERED LIVE IN THREE.JS & WEBGL</span>
+      </div>
+    </footer>
+
+  
+  <!-- macOS Apple-style Glassmorphic Floating Dock -->
+
+  </div>
+
+  <script type="module" src="/src/kage.js"></script>
+</body>
 </html>
