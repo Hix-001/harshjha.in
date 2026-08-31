@@ -1334,109 +1334,130 @@ function buildShell() {
    for two hundred metres.                                                 */
 function buildTemple() {
   const g = new THREE.Group();
-  /* Authentic Chunar Golden Sandstone, Red Sandstone & Ancient River Basalt */
-  const sandstone = surface(texStone(23, { sandstone: true, normal: 2.2 }), [2.5, 2.5], { color: 0xd8b18a, roughness: 0.86 });
-  const redstone  = surface(texStone(45, { redstone: true, normal: 1.9 }), [2.0, 2.0], { color: 0xba533f, roughness: 0.90 });
-  const basalt    = surface(texStone(67, { base: [25, 30, 36], normal: 2.4 }), [3.0, 3.0], { color: 0x2e353d, roughness: 0.82 });
-  const brass     = new THREE.MeshStandardMaterial({ color: 0xe5b448, roughness: 0.32, metalness: 0.88 });
-  const flameMat  = new THREE.MeshBasicMaterial({ color: 0xffaa22 });
+  /* One board library, sampled at two scales: the hall's flanks want the grain
+     long and lying down, the columns want it running their own length. */
+  const timber = surface(wallWood(), [4, 1.6], { color: 0x565150, normal: 1.5 });
+  const post   = surface(postWood(), [1.1, 1.0], { color: 0x8a746d, normal: 1.05, metalness: .03 });
+  const gold   = new THREE.MeshStandardMaterial({ color: 0x8f6f2e, roughness: .38, metalness: .78 });
+  const rf = lib('roof', () => texRoof());
+  /* Nearly a silhouette: the roof carries almost no colour of its own, and
+     what reads on it is relief rather than tone — so the normal goes up as
+     the albedo comes down. */
+  const tileMat = surface(rf, [1, 1], { color: 0x2b343a, roughness: .74, metalness: .10, normal: 1.4 });
+  /* the paper the lamps burn through — the only thing in the hall that is
+     allowed to be bright, and even then only just above white */
+  const paper = new THREE.MeshBasicMaterial({ color: hdr(1.06, .48, .18), fog: true, toneMapped: false });
+  const grid  = new THREE.MeshBasicMaterial({ map: tx(texShoji()), transparent: true,
+    depthWrite: false, fog: true });
+  WORLD.paper = paper;
 
-  /* Grand Stepped Ghat Platforms descending to River Ganga */
-  const ghatTiers = 9;
-  for (let t = 0; t < ghatTiers; t++) {
-    const tierW = 34 - t * 0.9;
-    const tierD = 2.4;
-    const tierH = 0.72;
-    const ty = -t * tierH;
-    const tz = -4.0 - t * tierD;
-
-    // Main Sandstone Step Platform
-    const stepMesh = new THREE.Mesh(new THREE.BoxGeometry(tierW, tierH, tierD), sandstone);
-    stepMesh.position.set(0, ty, tz);
-    g.add(stepMesh);
-
-    // Front River Edge Basalt Stone
-    const lipMesh = new THREE.Mesh(new THREE.BoxGeometry(tierW, 0.18, 0.35), basalt);
-    lipMesh.position.set(0, ty + tierH * 0.5 + 0.08, tz + tierD * 0.5);
-    g.add(lipMesh);
-
-    // Symmetrical Ghat Stairs Cascading Down
-    for (let st = -2; st <= 2; st += 2) {
-      if (st !== 0) {
-        const stairMesh = new THREE.Mesh(new THREE.BoxGeometry(2.4, tierH * 0.5, tierD * 0.9), redstone);
-        stairMesh.position.set(st * 6.5, ty + tierH * 0.25, tz);
-        g.add(stairMesh);
-      }
-    }
-
-    // Floating / Resting Brass Diyas with Warm Aarti Flames along the steps
-    if (t % 2 === 1) {
-      [-11, -5.5, 0, 5.5, 11].forEach(dx => {
-        if (Math.abs(dx) <= tierW * 0.45) {
-          const diya = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.12, 0.14, 8), brass);
-          diya.position.set(dx, ty + tierH * 0.5 + 0.08, tz + (Math.random() - 0.5) * 0.8);
-          g.add(diya);
-
-          const flame = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 8), flameMat);
-          flame.position.set(dx, ty + tierH * 0.5 + 0.22, diya.position.z);
-          g.add(flame);
-        }
+  /* one lit bay: a glowing sheet with a lattice hung just in front of it */
+  function bay(w, h, x, y, z) {
+    const p = new THREE.Mesh(new THREE.PlaneGeometry(w, h), paper);
+    p.position.set(x, y, z); g.add(p);
+    const s = new THREE.Mesh(new THREE.PlaneGeometry(w, h), grid);
+    s.position.set(x, y, z + .06); s.renderOrder = 3; g.add(s);
+  }
+  /* The block-and-arm band that carries every eave. The pieces are merged, so
+     they carry absolute coordinates — TEMPLE_Z has to go in here, not on the
+     mesh, or the whole band ends up hanging in the air by the camera. */
+  function brackets(halfW, halfD, y, step) {
+    const parts = [];
+    for (let x = -halfW; x <= halfW + 1e-3; x += step) {
+      [-halfD, halfD].forEach(dz => {
+        parts.push(new THREE.BoxGeometry(.34, .46, .34).translate(x, y, TEMPLE_Z + dz));
+        parts.push(new THREE.BoxGeometry(.92, .17, .24).translate(x, y + .30, TEMPLE_Z + dz));
       });
     }
-  }
-
-  /* Upper Ghat Colonnade & Mandapa Pillars */
-  const colPillarGeo = new THREE.CylinderGeometry(0.42, 0.52, 8.5, 14);
-  const colCapGeo    = new THREE.BoxGeometry(1.4, 0.55, 1.4);
-  for (let side = -1; side <= 1; side += 2) {
-    for (let r = 0; r < 5; r++) {
-      const cx = side * (5.5 + r * 1.1);
-      const cz = -2.5 - r * 4.0;
-      const cy = 4.2;
-
-      const p = new THREE.Mesh(colPillarGeo, sandstone);
-      p.position.set(cx, cy, cz);
-      g.add(p);
-
-      const cap = new THREE.Mesh(colCapGeo, redstone);
-      cap.position.set(cx, cy + 4.3, cz);
-      g.add(cap);
+    for (let dz = -halfD + step; dz < halfD - 1e-3; dz += step) {
+      [-halfW, halfW].forEach(x => {
+        parts.push(new THREE.BoxGeometry(.34, .46, .34).translate(x, y, TEMPLE_Z + dz));
+        parts.push(new THREE.BoxGeometry(.24, .17, .92).translate(x, y + .30, TEMPLE_Z + dz));
+      });
     }
+    const m = new THREE.Mesh(mergeGeos(parts), post);
+    m.castShadow = false; g.add(m);
   }
 
-  /* Holy River Ganga Water Surface */
-  const riverGeo = new THREE.PlaneGeometry(64, 64, 48, 48);
-  const riverMat = new THREE.MeshStandardMaterial({
-    color: 0x061118, roughness: 0.08, metalness: 0.92,
-    transparent: true, opacity: 0.92
+  const F = PODIUM;                                   /* the hall's floor level */
+
+  /* ---- ground storey: six bays of lit lattice between charred columns --- */
+  const core = new THREE.Mesh(new THREE.BoxGeometry(13.6, 5.0, 8.2), timber);
+  core.position.set(0, F + 2.5, TEMPLE_Z); core.castShadow = true; g.add(core);
+  for (let i = 0; i < 5; i++) {
+    const x = -5.6 + i * 2.8;
+    bay(1.55, 2.5, x, F + 2.6, TEMPLE_Z + 4.16);
+  }
+  for (let i = 0; i < 6; i++) {
+    const c = new THREE.Mesh(new THREE.CylinderGeometry(.30, .34, 5.0, 14), post);
+    c.position.set(-7.0 + i * 2.8, F + 2.5, TEMPLE_Z + 4.24); c.castShadow = true; g.add(c);
+  }
+  const sill = new THREE.Mesh(new THREE.BoxGeometry(14.6, .40, 8.9), post);
+  sill.position.set(0, F + .20, TEMPLE_Z); g.add(sill);
+  brackets(7.0, 4.4, F + 5.15, 1.40);
+
+  /* ---- the pent roof over the ground storey ---------------------------- */
+  const lower = new THREE.Mesh(roofGeo(9.6, 6.4, 3.2, 2.9, .40, .26), tileMat);
+  lower.position.set(0, F + 5.6, TEMPLE_Z); lower.castShadow = true; g.add(lower);
+
+  /* ---- upper storey: railed gallery, dark boards, the temple's name ----- */
+  const up = new THREE.Mesh(new THREE.BoxGeometry(10.0, 3.4, 6.0), timber);
+  up.position.set(0, F + 9.4, TEMPLE_Z); up.castShadow = true; g.add(up);
+  const deck = new THREE.Mesh(new THREE.BoxGeometry(12.4, .26, 8.4), post);
+  deck.position.set(0, F + 7.72, TEMPLE_Z); g.add(deck);
+  [.10, .94].forEach(dy => [4.2, -4.2].forEach(dz => {
+    const r = new THREE.Mesh(new THREE.BoxGeometry(12.4, .17, .17), post);
+    r.position.set(0, F + 7.85 + dy, TEMPLE_Z + dz); g.add(r);
+  }));
+  for (let i = 0; i <= 16; i++) {
+    const b = new THREE.Mesh(new THREE.BoxGeometry(.10, 1.05, .10), post);
+    b.position.set(-6.2 + i * .775, F + 8.42, TEMPLE_Z + 4.2); g.add(b);
+  }
+  for (let i = 0; i < 4; i++)
+    bay(1.0, 1.35, -4.5 + i * 3.0, F + 9.5, TEMPLE_Z + 3.06);
+  /* the plaque */
+  const plq = new THREE.Mesh(new THREE.BoxGeometry(1.9, 1.30, .16), gold);
+  plq.position.set(0, F + 9.7, TEMPLE_Z + 3.12); g.add(plq);
+  const plqIn = new THREE.Mesh(new THREE.BoxGeometry(1.52, .98, .18), timber);
+  plqIn.position.set(0, F + 9.7, TEMPLE_Z + 3.16); g.add(plqIn);
+  brackets(5.2, 3.3, F + 11.2, 1.30);
+
+  /* ---- the main roof: the silhouette the whole page hangs on ----------- */
+  const upper = new THREE.Mesh(roofGeo(10.8, 7.2, 3.6, 5.2, .48, .26), tileMat);
+  upper.position.set(0, F + 11.7, TEMPLE_Z); upper.castShadow = true; g.add(upper);
+  const ridge = new THREE.Mesh(new THREE.BoxGeometry(7.6, .60, 1.05), tileMat);
+  ridge.position.set(0, F + 17.10, TEMPLE_Z); g.add(ridge);
+  [-1, 1].forEach(s => {
+    const oni = new THREE.Mesh(new THREE.ConeGeometry(.46, 1.15, 4), tileMat);
+    oni.position.set(s * 3.9, F + 17.6, TEMPLE_Z); oni.rotation.y = Math.PI / 4; g.add(oni);
   });
-  const riverMesh = new THREE.Mesh(riverGeo, riverMat);
-  riverMesh.rotation.x = -Math.PI * 0.5;
-  riverMesh.position.set(0, -6.6, -24);
-  g.add(riverMesh);
+  WORLD.templeTop = F + 18.2;
 
-  /* Floating Diyas with Marigold Rings on the River Water */
-  for (let f = 0; f < 28; f++) {
-    const fx = (Math.random() - 0.5) * 44;
-    const fz = -18 - Math.random() * 26;
-    const fy = -6.45;
+  /* ---- the two flanking wings, lit the same way ------------------------ */
+  [-1, 1].forEach(s => {
+    const w = new THREE.Mesh(new THREE.BoxGeometry(7.6, 3.4, 5.2), timber);
+    w.position.set(s * 10.6, F + 1.7, TEMPLE_Z + 1.4); w.castShadow = true; g.add(w);
+    for (let i = 0; i < 3; i++)
+      bay(1.3, 1.6, s * 10.6 + (i - 1) * 2.4, F + 1.8, TEMPLE_Z + 4.06);
+    const r = new THREE.Mesh(roofGeo(5.0, 4.0, 1.4, 1.9, .32, .26), tileMat);
+    r.position.set(s * 10.6, F + 3.4, TEMPLE_Z + 1.4); r.castShadow = true; g.add(r);
+  });
 
-    const riverDiya = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.18, 0.18, 10), brass);
-    riverDiya.position.set(fx, fy, fz);
-    g.add(riverDiya);
+  scene.add(g); WORLD.temple = g;
 
-    const rFlame = new THREE.Mesh(new THREE.SphereGeometry(0.14, 8, 8), flameMat);
-    rFlame.position.set(fx, fy + 0.18, fz);
-    g.add(rFlame);
-  }
+  /* the glow the hall pushes out over its own steps */
+  const spill = new THREE.Mesh(new THREE.PlaneGeometry(30, 16),
+    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(255,150,66,.80)', 'rgba(240,96,26,.24)')),
+      transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .30 }));
+  spill.position.set(0, F + 3.0, TEMPLE_Z + 5.6); spill.renderOrder = 2;
+  scene.add(spill); WORLD.hallHalo = spill;
 
-  /* Central Riverfront Aarti Point Light */
-  const riverAartiGlow = new THREE.PointLight(0xff8c26, 3.6, 34, 1.2);
-  riverAartiGlow.position.set(0, -3.5, -16);
-  scene.add(riverAartiGlow);
-
-  scene.add(g);
-  return g;
+  /* the band of mist that separates the hall from the trees behind it — the
+     one thing that stops the whole background reading as a single flat cut-out */
+  const mist = new THREE.Mesh(new THREE.PlaneGeometry(64, 20),
+    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(150,178,190,.62)', 'rgba(104,138,154,.20)')),
+      transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .17 }));
+  mist.position.set(0, F - 1.4, TEMPLE_Z + 10); mist.renderOrder = 2; scene.add(mist);
 }
 
 /* --------------------------------------------------- the vermilion moon
