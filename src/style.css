@@ -1,15 +1,19 @@
 /* ============================================================= tokens */
 :root{
-  --ink:#05070a;          /* page black */
-  --ink-2:#0a0e12;        /* raised black */
-  --bone:#dfe7e0;         /* the pale sage white of the wordmark */
-  --bone-dim:#aab4ad;
-  --muted:#78837c;
-  --line:rgba(223,231,224,.13);
-  --line-soft:rgba(223,231,224,.07);
-  --vermilion:#e0231c;
-  --ember:#ff5a3c;
-  --gold:#c9a24a;
+  --ink:#05070a;          /* Deep Nocturnal Basalt */
+  --ink-2:#0a0e14;        /* Raised Basalt */
+  --sandstone:#d8b18a;    /* Chunar Golden Sandstone */
+  --sandstone-dim:#a3866b;
+  --terracotta:#c85a2b;   /* Vibrant Terracotta Ochre */
+  --gold:#e5b448;         /* Temple Brass / Polished Gold */
+  --kumkum:#d42b2b;       /* Sacred Vermilion Kumkum */
+  --bone:#eedfc8;         /* Warm Ivory Stone */
+  --bone-dim:#bfae95;
+  --muted:#7d7465;
+  --line:rgba(216, 177, 138, 0.16);
+  --line-soft:rgba(216, 177, 138, 0.08);
+  --vermilion:#d42b2b;
+  --ember:#ff6f26;
   --pad:clamp(20px, 3.4vw, 56px);
   --nav-h:84px;
   --ease:cubic-bezier(.22,.61,.36,1);
@@ -890,3 +894,37 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 .pre-mark svg{ width:44px; height:44px; margin:0 auto; }
 
 
+
+
+/* ============================================================= Jaali & Architectural Accents */
+.card-fr::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:12px;
+  border:1px solid var(--line);
+  pointer-events:none;
+}
+.card:hover .card-fr::after{
+  border-color:rgba(229, 180, 72, 0.35);
+}
+.eyebrow .dot{
+  background:var(--gold);
+  box-shadow:0 0 8px var(--gold);
+}
+.peek-play circle{
+  stroke:var(--gold);
+}
+.peek-play polygon{
+  fill:var(--sandstone);
+}
+.cta{
+  background:linear-gradient(135deg, rgba(200, 90, 43, 0.22), rgba(229, 180, 72, 0.15));
+  border:1px solid rgba(229, 180, 72, 0.35);
+  color:var(--bone);
+}
+.cta:hover{
+  border-color:var(--gold);
+  background:linear-gradient(135deg, rgba(200, 90, 43, 0.38), rgba(229, 180, 72, 0.28));
+  box-shadow:0 0 25px rgba(229, 180, 72, 0.22);
+}

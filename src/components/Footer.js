@@ -5,7 +5,7 @@ export function renderFooter() {
         <div class="foot-brand">
           <div class="foot-title">
             <b>HARSH JHA</b>
-            <span class="jp">情報科学技術 · 学部生</span>
+            <span class="jp">संगणक शास्त्र · स्थापत्य</span>
           </div>
           <p>2nd Year Computer Science & Engineering undergraduate focusing on full-stack web architectures, 3D WebGL graphics, and computational systems.</p>
           <div class="foot-status">
@@ -16,11 +16,11 @@ export function renderFooter() {
         <div>
           <h4>Navigation</h4>
           <ul>
-            <li><a href="#hero">00 // Home</a></li>
-            <li><a href="#gate">01 // About</a></li>
-            <li><a href="#pathways">02 // Projects</a></li>
-            <li><a href="#lessons">03 // Skills</a></li>
-            <li><a href="#eternity">04 // Contact</a></li>
+            <li><a href="#hero">00 // आरम्भ (Home)</a></li>
+            <li><a href="#gate">01 // संरचना (About)</a></li>
+            <li><a href="#pathways">02 // निर्माण (Projects)</a></li>
+            <li><a href="#lessons">03 // कौशल (Skills)</a></li>
+            <li><a href="#eternity">04 // सम्पर्क (Contact)</a></li>
           </ul>
         </div>
         <div>
@@ -44,7 +44,7 @@ export function renderFooter() {
       </div>
       <div class="foot-base">
         <span>© 2026 HARSH JHA. ALL RIGHTS RESERVED.</span>
-        <span class="jp">知識 · 創造 · 技術</span>
+        <span class="jp">ज्ञानम् · रचना · तन्त्रम्</span>
         <span>RENDERED LIVE IN THREE.JS & WEBGL</span>
       </div>
     </footer>`;
