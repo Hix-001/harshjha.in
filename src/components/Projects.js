@@ -4,13 +4,13 @@ export function renderProjects() {
       <div class="sec-head">
         <span class="k"><b>02</b> / SELECTED WORKS</span>
         <span class="rule"></span>
-        <span class="k jp">निर्माण · FEATURED BUILDS</span>
+        <span class="k jp">कृति · FEATURED BUILDS</span>
       </div>
       <div class="cards">
         <!-- Project 1 -->
         <article class="card" data-rv="up">
           <div class="card-fr">
-            <span class="glow" style="--gx:65%; --gy:32%; --gr:24px; --gc1:#ff6f26; --gc2:#d42b2b; --gt:4.2s; --gt2:5.8s"></span>
+            <span class="glow" style="--gx:65%; --gy:32%; --gr:24px; --gc1:#ff7a26; --gc2:#d42b2b; --gt:4.2s; --gt2:5.8s"></span>
             <div class="card-lab">
               <div>
                 <b>Nexus Workspace</b>
@@ -20,8 +20,8 @@ export function renderProjects() {
             </div>
             <span class="card-ar">
               <svg viewBox="0 0 26 26" fill="none">
-                <circle cx="13" cy="13" r="12" stroke="#d8b18a" stroke-width="1"/>
-                <path d="M9 17L17 9M17 9H11M17 9V15" stroke="#d8b18a" stroke-width="1.4"/>
+                <circle cx="13" cy="13" r="12" stroke="#d6b28d" stroke-width="1"/>
+                <path d="M9 17L17 9M17 9H11M17 9V15" stroke="#d6b28d" stroke-width="1.4"/>
               </svg>
             </span>
           </div>
@@ -34,7 +34,7 @@ export function renderProjects() {
         <!-- Project 2 -->
         <article class="card" data-rv="up">
           <div class="card-fr">
-            <span class="glow glow--flame" style="--gx:50%; --gy:68%; --gr:22px; --gc1:#e5b448; --gc2:#c85a2b; --gt:2.6s; --gt2:3.8s"></span>
+            <span class="glow glow--flame" style="--gx:50%; --gy:68%; --gr:22px; --gc1:#e5a93c; --gc2:#c85a2b; --gt:2.6s; --gt2:3.8s"></span>
             <div class="card-lab">
               <div>
                 <b>AI Code Mentor</b>
@@ -44,8 +44,8 @@ export function renderProjects() {
             </div>
             <span class="card-ar">
               <svg viewBox="0 0 26 26" fill="none">
-                <circle cx="13" cy="13" r="12" stroke="#d8b18a" stroke-width="1"/>
-                <path d="M9 17L17 9M17 9H11M17 9V15" stroke="#d8b18a" stroke-width="1.4"/>
+                <circle cx="13" cy="13" r="12" stroke="#d6b28d" stroke-width="1"/>
+                <path d="M9 17L17 9M17 9H11M17 9V15" stroke="#d6b28d" stroke-width="1.4"/>
               </svg>
             </span>
           </div>
@@ -68,8 +68,8 @@ export function renderProjects() {
             </div>
             <span class="card-ar">
               <svg viewBox="0 0 26 26" fill="none">
-                <circle cx="13" cy="13" r="12" stroke="#d8b18a" stroke-width="1"/>
-                <path d="M9 17L17 9M17 9H11M17 9V15" stroke="#d8b18a" stroke-width="1.4"/>
+                <circle cx="13" cy="13" r="12" stroke="#d6b28d" stroke-width="1"/>
+                <path d="M9 17L17 9M17 9H11M17 9V15" stroke="#d6b28d" stroke-width="1.4"/>
               </svg>
             </span>
           </div>

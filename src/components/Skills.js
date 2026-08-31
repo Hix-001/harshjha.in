@@ -4,11 +4,11 @@ export function renderSkills() {
       <div class="sec-head">
         <span class="k"><b>03</b> / TECHNICAL REPERTOIRE</span>
         <span class="rule"></span>
-        <span class="k jp">कौशल · STACK & FOUNDATIONS</span>
+        <span class="k jp">विद्या · KNOWLEDGE & TOOLS</span>
       </div>
       <div class="cur-head">
         <h2 class="display h-sec" data-rv="up">
-          Languages, Tools & Architectural Systems
+          Languages, Systems & Core CS Tools
         </h2>
         <p class="body" data-rv="up">
           A disciplined engineering repertoire bridging low-level computational efficiency with expressive modern web interfaces and scalable backend architectures.

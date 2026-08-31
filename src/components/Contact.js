@@ -2,10 +2,10 @@ export function renderContact() {
   return `
     <section class="sec fin" id="eternity" data-cam="4">
       <div class="eyebrow" data-rv="fade">
-        <span class="jp">सम्पर्क एवं संवाद · GET IN TOUCH</span>
+        <span class="jp">संवाद एवं सम्पर्क · GET IN TOUCH</span>
       </div>
       <h2 class="display" data-rv="up">
-        Let's Architect Something Remarkable
+        Let's Build Something Remarkable
       </h2>
       <p class="body-lg" data-rv="up">
         I am currently seeking software engineering internships, collaborative development projects, and research opportunities. Let's connect and build impactful digital systems.

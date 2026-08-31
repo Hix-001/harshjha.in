@@ -958,50 +958,55 @@ function texRockCutout(seed, opt) {
 
 /* a maple bough leaning into the top of frame */
 function texBranchCutout(seed) {
-  const W = 1536, H = 1024;
-  const c = cvs(W, H), x = c.getContext('2d');
-  const rnd = mulberry32(seed);
-  const leaves = [];
+  const W = 1024, H = 680, c = cvs(W, H), x = c.getContext('2d');
+  const rnd = mulberry32(seed || 505);
+  x.clearRect(0, 0, W, H);
+  
+  /* Sacred Banyan / Peepal Leafy Branch silhouette framing the upper corner */
+  x.strokeStyle = '#1e140d';
+  x.lineWidth = 14;
+  x.lineCap = 'round';
+  x.beginPath();
+  x.moveTo(W + 20, 40);
+  x.bezierCurveTo(W * 0.7, 90, W * 0.45, 140, W * 0.25, 240);
+  x.stroke();
 
-  function bough(px, py, ang, len, wid, depth) {
-    const steps = 7;
-    let cx2 = px, cy = py, a = ang;
-    x.beginPath(); x.moveTo(cx2, cy);
-    for (let s = 0; s < steps; s++) {
-      a += (rnd() - .5) * .30;
-      cx2 += Math.cos(a) * len / steps; cy += Math.sin(a) * len / steps;
-      x.lineTo(cx2, cy);
-    }
-    x.lineCap = 'round'; x.lineWidth = wid;
-    x.strokeStyle = 'rgba(' + (26 + depth * 5 | 0) + ',' + (22 + depth * 4 | 0) + ',' + (22 + depth * 4 | 0) + ',1)';
+  // Secondary branches
+  for (let b = 0; b < 6; b++) {
+    const bx = W * (0.85 - b * 0.11);
+    const by = 60 + b * 28;
+    x.lineWidth = 7 - b * 0.7;
+    x.beginPath();
+    x.moveTo(bx, by);
+    x.quadraticCurveTo(bx - 90, by + 60, bx - 140, by + 120 + (rnd() - 0.5) * 40);
     x.stroke();
-    if (depth < 4 && len > 34) {
-      const k = depth === 0 ? 3 : 2;
-      for (let i = 0; i < k; i++) bough(cx2, cy, a + (rnd() - .5) * 1.25, len * (.58 + rnd() * .18), wid * .58, depth + 1);
-    } else {
-      for (let i = 0; i < 9; i++)
-        leaves.push([cx2 + (rnd() - .5) * 78, cy + (rnd() - .5) * 78, rnd() * TAU, 12 + rnd() * 20, rnd()]);
-    }
   }
-  bough(W * 1.02, H * .06, Math.PI * .78, 420, 26, 0);
-  bough(W * .86, -H * .02, Math.PI * .62, 330, 18, 1);
 
-  const leafImg = texLeaf();
-  const tint = cvs(128, 128), tx = tint.getContext('2d');
-  leaves.forEach(l => {
-    tx.clearRect(0, 0, 128, 128);
-    tx.drawImage(leafImg, 0, 0);
-    tx.globalCompositeOperation = 'source-in';
-    const v = l[4];
-    tx.fillStyle = hex(96 + v * 96, 14 + v * 22, 16 + v * 18);
-    tx.fillRect(0, 0, 128, 128);
-    tx.globalCompositeOperation = 'source-over';
-    x.save(); x.translate(l[0], l[1]); x.rotate(l[2]);
-    x.globalAlpha = .78 + v * .22;
-    x.drawImage(tint, -l[3], -l[3], l[3] * 2, l[3] * 2);
+  // Peepal leaves with characteristic cordate heart shape & long tip
+  for (let i = 0; i < 95; i++) {
+    const lx = W * (0.2 + rnd() * 0.75);
+    const ly = 50 + rnd() * 260;
+    const ang = rnd() * Math.PI * 2;
+    const size = 16 + rnd() * 22;
+
+    x.save();
+    x.translate(lx, ly);
+    x.rotate(ang);
+
+    const grad = x.createRadialGradient(0, 0, 2, 0, 0, size);
+    grad.addColorStop(0, '#5a4218');
+    grad.addColorStop(0.5, '#2e1f0e');
+    grad.addColorStop(1, '#120b06');
+
+    x.fillStyle = grad;
+    x.beginPath();
+    x.moveTo(0, -size);
+    x.bezierCurveTo(size * 0.8, -size * 0.5, size * 0.7, size * 0.6, 0, size * 1.3);
+    x.bezierCurveTo(-size * 0.7, size * 0.6, -size * 0.8, -size * 0.5, 0, -size);
+    x.fill();
     x.restore();
-  });
-  x.globalAlpha = 1;
+  }
+
   return c;
 }
 /* ================================================================= 4 · gl */
@@ -1329,103 +1334,106 @@ function buildShell() {
    for two hundred metres.                                                 */
 function buildTemple() {
   const g = new THREE.Group();
-  /* Indian Chunar Sandstone & Ancient Basalt Surfaces */
-  const sandstone = surface(texStone(23, { sandstone: true, normal: 2.1 }), [2.4, 2.4], { color: 0xd4a87a, roughness: 0.88 });
-  const redstone  = surface(texStone(45, { redstone: true, normal: 1.8 }), [1.8, 1.8], { color: 0xb84f3d, roughness: 0.92 });
-  const basalt    = surface(texStone(67, { base: [28, 34, 38], normal: 2.4 }), [3.0, 3.0], { color: 0x323a42, roughness: 0.85 });
-  const brass     = new THREE.MeshStandardMaterial({ color: 0xe5b448, roughness: 0.35, metalness: 0.85 });
+  /* Authentic Chunar Golden Sandstone, Red Sandstone & Ancient River Basalt */
+  const sandstone = surface(texStone(23, { sandstone: true, normal: 2.2 }), [2.5, 2.5], { color: 0xd8b18a, roughness: 0.86 });
+  const redstone  = surface(texStone(45, { redstone: true, normal: 1.9 }), [2.0, 2.0], { color: 0xba533f, roughness: 0.90 });
+  const basalt    = surface(texStone(67, { base: [25, 30, 36], normal: 2.4 }), [3.0, 3.0], { color: 0x2e353d, roughness: 0.82 });
+  const brass     = new THREE.MeshStandardMaterial({ color: 0xe5b448, roughness: 0.32, metalness: 0.88 });
+  const flameMat  = new THREE.MeshBasicMaterial({ color: 0xffaa22 });
 
-  /* Grand Sandstone Mandapa & Pillars */
-  const pillarGeo = new THREE.CylinderGeometry(0.36, 0.42, 7.5, 12);
-  const capitalGeo = new THREE.BoxGeometry(1.2, 0.45, 1.2);
-  const basePlinthGeo = new THREE.BoxGeometry(1.3, 0.5, 1.3);
+  /* Grand Stepped Ghat Platforms descending to River Ganga */
+  const ghatTiers = 9;
+  for (let t = 0; t < ghatTiers; t++) {
+    const tierW = 34 - t * 0.9;
+    const tierD = 2.4;
+    const tierH = 0.72;
+    const ty = -t * tierH;
+    const tz = -4.0 - t * tierD;
 
-  // Symmetrical Mandapa Colonnade
+    // Main Sandstone Step Platform
+    const stepMesh = new THREE.Mesh(new THREE.BoxGeometry(tierW, tierH, tierD), sandstone);
+    stepMesh.position.set(0, ty, tz);
+    g.add(stepMesh);
+
+    // Front River Edge Basalt Stone
+    const lipMesh = new THREE.Mesh(new THREE.BoxGeometry(tierW, 0.18, 0.35), basalt);
+    lipMesh.position.set(0, ty + tierH * 0.5 + 0.08, tz + tierD * 0.5);
+    g.add(lipMesh);
+
+    // Symmetrical Ghat Stairs Cascading Down
+    for (let st = -2; st <= 2; st += 2) {
+      if (st !== 0) {
+        const stairMesh = new THREE.Mesh(new THREE.BoxGeometry(2.4, tierH * 0.5, tierD * 0.9), redstone);
+        stairMesh.position.set(st * 6.5, ty + tierH * 0.25, tz);
+        g.add(stairMesh);
+      }
+    }
+
+    // Floating / Resting Brass Diyas with Warm Aarti Flames along the steps
+    if (t % 2 === 1) {
+      [-11, -5.5, 0, 5.5, 11].forEach(dx => {
+        if (Math.abs(dx) <= tierW * 0.45) {
+          const diya = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.12, 0.14, 8), brass);
+          diya.position.set(dx, ty + tierH * 0.5 + 0.08, tz + (Math.random() - 0.5) * 0.8);
+          g.add(diya);
+
+          const flame = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 8), flameMat);
+          flame.position.set(dx, ty + tierH * 0.5 + 0.22, diya.position.z);
+          g.add(flame);
+        }
+      });
+    }
+  }
+
+  /* Upper Ghat Colonnade & Mandapa Pillars */
+  const colPillarGeo = new THREE.CylinderGeometry(0.42, 0.52, 8.5, 14);
+  const colCapGeo    = new THREE.BoxGeometry(1.4, 0.55, 1.4);
   for (let side = -1; side <= 1; side += 2) {
-    for (let row = 0; row < 5; row++) {
-      const px = side * (4.2 + row * 0.8);
-      const pz = -3.5 - row * 3.6;
-      const py = 3.5;
+    for (let r = 0; r < 5; r++) {
+      const cx = side * (5.5 + r * 1.1);
+      const cz = -2.5 - r * 4.0;
+      const cy = 4.2;
 
-      const pMesh = new THREE.Mesh(pillarGeo, sandstone);
-      pMesh.position.set(px, py, pz);
-      g.add(pMesh);
+      const p = new THREE.Mesh(colPillarGeo, sandstone);
+      p.position.set(cx, cy, cz);
+      g.add(p);
 
-      const capMesh = new THREE.Mesh(capitalGeo, redstone);
-      capMesh.position.set(px, py + 3.8, pz);
-      g.add(capMesh);
-
-      const plinthMesh = new THREE.Mesh(basePlinthGeo, basalt);
-      plinthMesh.position.set(px, py - 3.8, pz);
-      g.add(plinthMesh);
+      const cap = new THREE.Mesh(colCapGeo, redstone);
+      cap.position.set(cx, cy + 4.3, cz);
+      g.add(cap);
     }
   }
 
-  /* Baori Symmetrical Interlocking Step Tiers (Stepwell) */
-  const stepTiers = 7;
-  const tierWidth = 14;
-  for (let t = 0; t < stepTiers; t++) {
-    const stepDepth = 1.4;
-    const stepHeight = 0.65;
-    const curY = -t * stepHeight;
-    const curZ = -6.0 - t * stepDepth;
-    const curW = tierWidth - t * 0.8;
-
-    // Central Terraces
-    const terrGeo = new THREE.BoxGeometry(curW, stepHeight, stepDepth);
-    const terrMesh = new THREE.Mesh(terrGeo, sandstone);
-    terrMesh.position.set(0, curY, curZ);
-    g.add(terrMesh);
-
-    // Left & Right Triangular Step Cascades (The iconic Baori geometry)
-    for (let st = 0; st < 4; st++) {
-      const stairGeo = new THREE.BoxGeometry(1.8 - st * 0.35, stepHeight * 0.5, stepDepth * 0.8);
-      const leftStair = new THREE.Mesh(stairGeo, redstone);
-      leftStair.position.set(-curW * 0.5 + 1.2 + st * 0.5, curY - (st * 0.15), curZ + 0.3);
-      g.add(leftStair);
-
-      const rightStair = new THREE.Mesh(stairGeo, redstone);
-      rightStair.position.set(curW * 0.5 - 1.2 - st * 0.5, curY - (st * 0.15), curZ + 0.3);
-      g.add(rightStair);
-    }
-
-    // Carved Stone Lamp Niches with glowing Diyas
-    if (t % 2 === 0) {
-      const diyaBowlGeo = new THREE.CylinderGeometry(0.22, 0.12, 0.14, 8);
-      const leftDiya = new THREE.Mesh(diyaBowlGeo, brass);
-      leftDiya.position.set(-curW * 0.45, curY + 0.38, curZ);
-      g.add(leftDiya);
-
-      const rightDiya = new THREE.Mesh(diyaBowlGeo, brass);
-      rightDiya.position.set(curW * 0.45, curY + 0.38, curZ);
-      g.add(rightDiya);
-    }
-  }
-
-  /* Deep Stepwell Water Reservoir (Kund) */
-  const waterGeo = new THREE.PlaneGeometry(28, 36, 32, 32);
-  const waterMat = new THREE.MeshStandardMaterial({
-    color: 0x051d26, roughness: 0.12, metalness: 0.85,
-    transparent: true, opacity: 0.88
+  /* Holy River Ganga Water Surface */
+  const riverGeo = new THREE.PlaneGeometry(64, 64, 48, 48);
+  const riverMat = new THREE.MeshStandardMaterial({
+    color: 0x061118, roughness: 0.08, metalness: 0.92,
+    transparent: true, opacity: 0.92
   });
-  const waterMesh = new THREE.Mesh(waterGeo, waterMat);
-  waterMesh.rotation.x = -Math.PI * 0.5;
-  waterMesh.position.set(0, -4.8, -16);
-  g.add(waterMesh);
+  const riverMesh = new THREE.Mesh(riverGeo, riverMat);
+  riverMesh.rotation.x = -Math.PI * 0.5;
+  riverMesh.position.set(0, -6.6, -24);
+  g.add(riverMesh);
 
-  /* Upper Carved Stone Arch (Torana / Mandapa Arch) */
-  const archGeo = new THREE.BoxGeometry(12.5, 0.9, 2.2);
-  const archMesh = new THREE.Mesh(archGeo, sandstone);
-  archMesh.position.set(0, 7.6, -3.5);
-  g.add(archMesh);
+  /* Floating Diyas with Marigold Rings on the River Water */
+  for (let f = 0; f < 28; f++) {
+    const fx = (Math.random() - 0.5) * 44;
+    const fz = -18 - Math.random() * 26;
+    const fy = -6.45;
 
-  /* Kalasha / Brass Finials on upper balustrades */
-  const kalashaGeo = new THREE.SphereGeometry(0.38, 12, 12);
-  for (let k = -3; k <= 3; k += 2) {
-    const kMesh = new THREE.Mesh(kalashaGeo, brass);
-    kMesh.position.set(k * 1.8, 8.2, -3.5);
-    g.add(kMesh);
+    const riverDiya = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.18, 0.18, 10), brass);
+    riverDiya.position.set(fx, fy, fz);
+    g.add(riverDiya);
+
+    const rFlame = new THREE.Mesh(new THREE.SphereGeometry(0.14, 8, 8), flameMat);
+    rFlame.position.set(fx, fy + 0.18, fz);
+    g.add(rFlame);
   }
+
+  /* Central Riverfront Aarti Point Light */
+  const riverAartiGlow = new THREE.PointLight(0xff8c26, 3.6, 34, 1.2);
+  riverAartiGlow.position.set(0, -3.5, -16);
+  scene.add(riverAartiGlow);
 
   scene.add(g);
   return g;
@@ -1465,199 +1473,174 @@ function placeMoon() {
 }
 
 function buildTorii() {
-  /* the weathering costs the gate a lot of its chroma, so the tint puts it
-     back: red lifted well past green and blue rather than a flat brightening,
-     or the vermilion comes out of the grade as brick */
-  const lac = surface(lib('lacquer', () => texLacquer()), [2, 2],
-    { color: hdr(1.72, 1.02, .94), roughness: .92, metalness: .05, normal: .75 });
-  const gold = new THREE.MeshStandardMaterial({ color: 0x7a5d2a, roughness: .50, metalness: .60 });
   const g = new THREE.Group();
-  const BASE = .78, H = 8.2, SPAN = 3.55;
+  /* Carved Chunar Sandstone & Temple Brass */
+  const sandstone = surface(texStone(108, { sandstone: true, normal: 2.2 }), [2.0, 2.0], { color: 0xd8b18a, roughness: 0.86 });
+  const redstone  = surface(texStone(216, { redstone: true, normal: 1.9 }), [1.5, 1.5], { color: 0xba533f, roughness: 0.90 });
+  const brass     = new THREE.MeshStandardMaterial({ color: 0xe5b448, roughness: 0.32, metalness: 0.88 });
 
-  [-1, 1].forEach(s => {
-    const col = new THREE.Mesh(new THREE.CylinderGeometry(.30, .38, H, 26), lac);
-    col.position.set(s * SPAN, BASE + H / 2, 0); col.castShadow = true; g.add(col);
-    const foot = new THREE.Mesh(new THREE.CylinderGeometry(.46, .50, .52, 26), gold);
-    foot.position.set(s * SPAN, BASE + .26, 0); foot.castShadow = true; g.add(foot);
-    const collar = new THREE.Mesh(new THREE.CylinderGeometry(.345, .345, .26, 26), gold);
-    collar.position.set(s * SPAN, BASE + H - 1.42, 0); g.add(collar);
-    /* the ornate bracket where the beams cross the column */
-    const br = new THREE.Mesh(new THREE.BoxGeometry(.86, .30, .86), gold);
-    br.position.set(s * SPAN, BASE + H - .72, 0); g.add(br);
-    const br2 = new THREE.Mesh(new THREE.BoxGeometry(.60, .52, .60), gold);
-    br2.position.set(s * SPAN, BASE + H - .34, 0); g.add(br2);
-    [-1, 1].forEach(d => {
-      const wing = new THREE.Mesh(new THREE.BoxGeometry(.24, .70, .18), gold);
-      wing.position.set(s * SPAN + d * .40, BASE + H - .62, .30); g.add(wing);
-      const wing2 = wing.clone(); wing2.position.z = -.30; g.add(wing2);
-    });
+  /* Twin Monolithic Stambha Pillars */
+  const pillarGeo = new THREE.CylinderGeometry(0.55, 0.68, 11.5, 16);
+  const baseGeo   = new THREE.BoxGeometry(2.2, 1.2, 2.2);
+  const capitalGeo= new THREE.CylinderGeometry(0.85, 0.55, 0.8, 16);
+  const kalashGeo = new THREE.SphereGeometry(0.48, 12, 12);
+
+  [-4.2, 4.2].forEach(x => {
+    // Base Plinth
+    const baseMesh = new THREE.Mesh(baseGeo, redstone);
+    baseMesh.position.set(x, 0.6, -1.8);
+    g.add(baseMesh);
+
+    // Fluted Column
+    const pMesh = new THREE.Mesh(pillarGeo, sandstone);
+    pMesh.position.set(x, 6.2, -1.8);
+    g.add(pMesh);
+
+    // Capital Moulding
+    const capMesh = new THREE.Mesh(capitalGeo, redstone);
+    capMesh.position.set(x, 12.0, -1.8);
+    g.add(capMesh);
+
+    // Brass Kalasha Finial
+    const kMesh = new THREE.Mesh(kalashGeo, brass);
+    kMesh.position.set(x, 12.8, -1.8);
+    g.add(kMesh);
   });
 
-  /* nuki — the straight beam that pierces the columns */
-  const nuki = new THREE.Mesh(new THREE.BoxGeometry(9.4, .52, .46), lac);
-  nuki.position.set(0, BASE + H - 2.15, 0); nuki.castShadow = true; g.add(nuki);
+  /* Main Carved Stone Torana Arch Beams */
+  const lowerBeamGeo = new THREE.BoxGeometry(11.2, 0.75, 1.2);
+  const lowerBeam = new THREE.Mesh(lowerBeamGeo, sandstone);
+  lowerBeam.position.set(0, 9.8, -1.8);
+  g.add(lowerBeam);
 
-  /* gakuzuka — the little strut at the centre */
-  const gak = new THREE.Mesh(new THREE.BoxGeometry(.46, 1.22, .40), lac);
-  gak.position.set(0, BASE + H + .10, 0); g.add(gak);
-  const gakG = new THREE.Mesh(new THREE.BoxGeometry(.60, .18, .50), gold);
-  gakG.position.set(0, BASE + H + .68, 0); g.add(gakG);
+  const upperBeamGeo = new THREE.BoxGeometry(12.6, 0.85, 1.4);
+  const upperBeam = new THREE.Mesh(upperBeamGeo, sandstone);
+  upperBeam.position.set(0, 11.4, -1.8);
+  g.add(upperBeam);
 
-  /* shimaki + kasagi — the two crowning beams, swept upward at the ends */
-  function beamPath(half, rise, power) {
-    const p = [];
-    for (let i = 0; i <= 26; i++) {
-      const u = i / 26 * 2 - 1;
-      p.push(new THREE.Vector3(u * half, Math.pow(Math.abs(u), power) * rise, 0));
-    }
-    return p;
-  }
-  const shimaki = new THREE.Mesh(sweepPoly(beamPath(5.05, .40, 2.6),
-    [[-.30, -.19], [.30, -.19], [.32, .06], [.28, .21], [-.28, .21], [-.32, .06]]), lac);
-  shimaki.position.set(0, BASE + H - .52, 0); shimaki.castShadow = true; g.add(shimaki);
+  /* Central Auspicious Medallion */
+  const medalGeo = new THREE.CylinderGeometry(0.9, 0.9, 0.35, 24);
+  const medalMesh = new THREE.Mesh(medalGeo, brass);
+  medalMesh.rotation.x = Math.PI * 0.5;
+  medalMesh.position.set(0, 10.6, -1.7);
+  g.add(medalMesh);
 
-  const kasagi = new THREE.Mesh(sweepPoly(beamPath(5.85, .62, 2.4),
-    [[-.42, -.24], [.42, -.24], [.46, .04], [.30, .28], [-.30, .28], [-.46, .04]]), lac);
-  kasagi.position.set(0, BASE + H + .96, 0); kasagi.castShadow = true; g.add(kasagi);
-  /* a black lacquer cap along the top of the kasagi */
-  const cap = new THREE.Mesh(sweepPoly(beamPath(5.95, .62, 2.4),
-    [[-.48, .22], [.48, .22], [.48, .34], [-.48, .34]]),
-    new THREE.MeshStandardMaterial({ color: 0x120c0c, roughness: .42, metalness: .14 }));
-  cap.position.set(0, BASE + H + .96, 0); g.add(cap);
-
-  /* the gate stands at the foot of the flight, not over the court — small
-     enough that the hall keeps the top of the frame to itself */
-  /* The lowest thing on the gate is the foot of each column, and it starts
-     at BASE — so anchoring the group at y=0 left the whole torii hanging
-     BASE*scale above the court. Drop it by exactly that and the feet land. */
-  const GS = .72;
-  g.position.set(0, -BASE * GS, -8.6); g.scale.setScalar(GS);
-  scene.add(g); WORLD.torii = g;
-}
-
-function buildLantern(x, z, s, y) {
-  const stone = lib('lanternStone', () => surface(lib('granite', () => texStone(17)), [1.5, 1.5],
-    { color: 0x9aa5a5, metalness: 0, normal: 1.45 }));
-  const dark  = lib('lanternDark', () => surface(postWood(), [.9, .9],
-    { color: 0xd8c2b6, metalness: .1, normal: .7 }));
-  const g = new THREE.Group();
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(.44, .52, .26, 20), stone);
-  base.position.y = .13; base.castShadow = true; g.add(base);
-  const post = new THREE.Mesh(new THREE.CylinderGeometry(.15, .18, 1.02, 16), stone);
-  post.position.y = .77; post.castShadow = true; g.add(post);
-  const shelf = new THREE.Mesh(new THREE.CylinderGeometry(.42, .34, .13, 20), stone);
-  shelf.position.y = 1.34; shelf.castShadow = true; g.add(shelf);
-
-  const box = new THREE.Mesh(new THREE.BoxGeometry(.50, .50, .50), dark);
-  box.position.y = 1.66; box.castShadow = true; g.add(box);
-  const paneMat = new THREE.MeshBasicMaterial({ color: hdr(2.3, .30, .085), fog: false, toneMapped: false });
-  [[0, 0, .256, 0], [0, 0, -.256, Math.PI], [.256, 0, 0, Math.PI / 2], [-.256, 0, 0, -Math.PI / 2]].forEach(p => {
-    const pane = new THREE.Mesh(new THREE.PlaneGeometry(.34, .34), paneMat);
-    pane.position.set(p[0], 1.66, p[2]); pane.rotation.y = p[3]; g.add(pane);
+  /* Hanging Temple Bells (Ghanta) */
+  const bellGeo = new THREE.ConeGeometry(0.28, 0.45, 12);
+  [-2.2, 0, 2.2].forEach(bx => {
+    const bellMesh = new THREE.Mesh(bellGeo, brass);
+    bellMesh.position.set(bx, 9.1, -1.8);
+    g.add(bellMesh);
   });
-  WORLD.lanternPane = WORLD.lanternPane || paneMat;
 
-  const roof = new THREE.Mesh(new THREE.CylinderGeometry(.10, .62, .34, 4, 1), stone);
-  roof.position.y = 2.06; roof.rotation.y = Math.PI / 4; roof.castShadow = true; g.add(roof);
-  const brim = new THREE.Mesh(new THREE.CylinderGeometry(.66, .70, .07, 4, 1), stone);
-  brim.position.y = 1.93; brim.rotation.y = Math.PI / 4; g.add(brim);
-  const knob = new THREE.Mesh(new THREE.SphereGeometry(.09, 12, 10), stone);
-  knob.position.y = 2.28; g.add(knob);
-  const tip = new THREE.Mesh(new THREE.ConeGeometry(.055, .16, 10), stone);
-  tip.position.y = 2.4; g.add(tip);
-
-  const glow = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 3.4),
-    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(255,120,60,.9)', 'rgba(255,60,24,.28)')),
-      transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .5 }));
-  glow.position.y = 1.66; glow.renderOrder = 2; g.add(glow);
-  glow.userData.billboard = true;
-
-  const lt = new THREE.PointLight(0xff5a24, 2.6, 9, 2);
-  lt.position.set(0, 1.66, 0); g.add(lt);
-  WORLD.lanternLights = WORLD.lanternLights || [];
-  WORLD.lanternLights.push(lt); WORLD.lanternGlows = WORLD.lanternGlows || []; WORLD.lanternGlows.push(glow);
-
-  g.position.set(x, y || 0, z); g.scale.setScalar(s || 1);
   scene.add(g);
   return g;
 }
 
-function buildMaple(seed, x, z, scale) {
-  const rnd = mulberry32(seed);
-  const parts = [], tips = [];
-  const M = new THREE.Matrix4(), Q = new THREE.Quaternion(), UP = new THREE.Vector3(0, 1, 0);
-  const dir = new THREE.Vector3(), pos = new THREE.Vector3();
-
-  function seg(from, to, r0, r1) {
-    dir.subVectors(to, from);
-    const len = dir.length(); dir.normalize();
-    const geo = new THREE.CylinderGeometry(r1, r0, len, 6, 1, true);
-    Q.setFromUnitVectors(UP, dir);
-    pos.addVectors(from, to).multiplyScalar(.5);
-    M.compose(pos, Q, new THREE.Vector3(1, 1, 1));
-    geo.applyMatrix4(M);
-    parts.push(geo);
-  }
-  function branch(from, dirV, len, rad, depth) {
-    const to = from.clone().addScaledVector(dirV, len);
-    to.y += len * .10;
-    seg(from, to, rad, rad * .68);
-    if (depth >= 4 || len < .34) { tips.push(to.clone()); return; }
-    const n = depth < 2 ? 3 : 2;
-    for (let i = 0; i < n; i++) {
-      const d = dirV.clone();
-      d.x += (rnd() - .5) * 1.25; d.z += (rnd() - .5) * 1.25; d.y += .30 + rnd() * .5;
-      d.normalize();
-      branch(to, d, len * (.62 + rnd() * .16), rad * .66, depth + 1);
-    }
-  }
-  const root = new THREE.Vector3(0, 0, 0);
-  seg(root, new THREE.Vector3(0, 1.5, 0), .22, .16);
-  for (let i = 0; i < 4; i++) {
-    const a = i / 4 * TAU + rnd();
-    branch(new THREE.Vector3(0, 1.5, 0), new THREE.Vector3(Math.cos(a) * .8, .8, Math.sin(a) * .8).normalize(), 1.45, .155, 0);
-  }
-  const trunk = new THREE.Mesh(mergeGeos(parts),
-    new THREE.MeshStandardMaterial({ color: 0x171413, roughness: .94, metalness: .0, side: THREE.DoubleSide }));
-  trunk.castShadow = true;
-
-  const leafGeo = new THREE.PlaneGeometry(.36, .36);
-  const leafMat = new THREE.MeshStandardMaterial({
-    map: tx(texLeaf()), color: 0x2b0406, alphaTest: .42, side: THREE.DoubleSide,
-    roughness: .86, metalness: 0, emissive: 0x080000, emissiveIntensity: .12
-  });
-  const per = LOW ? 5 : 9;
-  const inst = new THREE.InstancedMesh(leafGeo, leafMat, tips.length * per);
-  const m4 = new THREE.Matrix4(), e = new THREE.Euler(), q2 = new THREE.Quaternion(), sc = new THREE.Vector3();
-  let k = 0;
-  tips.forEach(t => {
-    for (let i = 0; i < per; i++) {
-      const p = new THREE.Vector3(t.x + (rnd() - .5) * .95, t.y + (rnd() - .5) * .8, t.z + (rnd() - .5) * .95);
-      e.set(rnd() * TAU, rnd() * TAU, rnd() * TAU);
-      q2.setFromEuler(e);
-      const s = .7 + rnd() * .75; sc.set(s, s, s);
-      m4.compose(p, q2, sc);
-      inst.setMatrixAt(k++, m4);
-    }
-  });
-  inst.instanceMatrix.needsUpdate = true;
-  inst.castShadow = false; inst.frustumCulled = false;
-
+function buildLantern(x, z, scale, y) {
   const g = new THREE.Group();
-  g.add(trunk); g.add(inst);
-  g.position.set(x, 0, z); g.scale.setScalar(scale || 1);
-  g.rotation.y = rnd() * TAU;
+  const s = scale || 1.0;
+  const sandstone = surface(texStone(33, { sandstone: true, normal: 2.0 }), [1.5, 1.5], { color: 0xd8b18a, roughness: 0.88 });
+  const redstone  = surface(texStone(55, { redstone: true, normal: 1.8 }), [1.2, 1.2], { color: 0xba533f, roughness: 0.90 });
+  const brass     = new THREE.MeshStandardMaterial({ color: 0xe5b448, roughness: 0.35, metalness: 0.85 });
+  const flameMat  = new THREE.MeshBasicMaterial({ color: 0xffaa22 });
+
+  /* Multi-tiered Deepastambha Pillar */
+  const base = new THREE.Mesh(new THREE.BoxGeometry(1.2 * s, 0.6 * s, 1.2 * s), redstone);
+  base.position.y = 0.3 * s;
+  g.add(base);
+
+  const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.22 * s, 0.28 * s, 3.2 * s, 10), sandstone);
+  shaft.position.y = 2.0 * s;
+  g.add(shaft);
+
+  /* 3 Tiers of Diya Arms */
+  for (let tier = 0; tier < 3; tier++) {
+    const ty = (1.4 + tier * 0.85) * s;
+    const tierDisc = new THREE.Mesh(new THREE.CylinderGeometry(0.55 * s, 0.35 * s, 0.14 * s, 12), redstone);
+    tierDisc.position.y = ty;
+    g.add(tierDisc);
+
+    // Glowing Diya Lamps on 4 sides
+    for (let a = 0; a < 4; a++) {
+      const angle = (a * Math.PI * 0.5) + (tier * 0.4);
+      const dx = Math.cos(angle) * 0.55 * s;
+      const dz = Math.sin(angle) * 0.55 * s;
+
+      const diya = new THREE.Mesh(new THREE.CylinderGeometry(0.12 * s, 0.06 * s, 0.08 * s, 8), brass);
+      diya.position.set(dx, ty + 0.08 * s, dz);
+      g.add(diya);
+
+      const flame = new THREE.Mesh(new THREE.SphereGeometry(0.06 * s, 6, 6), flameMat);
+      flame.position.set(dx, ty + 0.15 * s, dz);
+      g.add(flame);
+    }
+  }
+
+  /* Crown Finial with Top Diya */
+  const topDiya = new THREE.Mesh(new THREE.CylinderGeometry(0.28 * s, 0.15 * s, 0.16 * s, 8), brass);
+  topDiya.position.y = 4.0 * s;
+  g.add(topDiya);
+
+  const topFlame = new THREE.Mesh(new THREE.SphereGeometry(0.12 * s, 8, 8), flameMat);
+  topFlame.position.y = 4.18 * s;
+  g.add(topFlame);
+
+  /* Ambient warm flickering Diya light */
+  const light = new THREE.PointLight(0xff7a18, 1.8 * s, 14 * s, 1.4);
+  light.position.y = 3.6 * s;
+  g.add(light);
+
+  g.position.set(x, y !== undefined ? y : 0, z);
   scene.add(g);
-  /* leaves breathe in the wind */
-  leafMat.onBeforeCompile = sh => {
-    sh.uniforms.uT = WORLD.uT;
-    sh.vertexShader = 'uniform float uT;\n' + sh.vertexShader.replace('#include <begin_vertex>',
-      '#include <begin_vertex>\n' +
-      'vec3 wp = (instanceMatrix * vec4(0.0,0.0,0.0,1.0)).xyz;\n' +
-      'float ph = wp.x*1.7 + wp.z*1.3 + wp.y*.7;\n' +
-      'transformed.x += sin(uT*1.35 + ph)*0.055;\n' +
-      'transformed.z += cos(uT*1.05 + ph*1.3)*0.045;\n');
-  };
+  return g;
+}
+
+function buildMaple(seed, x, z, sc) {
+  const g = new THREE.Group();
+  const s = sc || 1.0;
+  const sandstone = surface(texStone(seed, { sandstone: true, normal: 2.0 }), [1.5, 1.5], { color: 0xd8b18a, roughness: 0.86 });
+  const redstone  = surface(texStone(seed + 10, { redstone: true, normal: 1.8 }), [1.2, 1.2], { color: 0xba533f, roughness: 0.90 });
+  const brass     = new THREE.MeshStandardMaterial({ color: 0xe5b448, roughness: 0.35, metalness: 0.85 });
+
+  /* Stepped Chhatri Plinth */
+  const plinth = new THREE.Mesh(new THREE.BoxGeometry(4.2 * s, 0.8 * s, 4.2 * s), redstone);
+  plinth.position.y = 0.4 * s;
+  g.add(plinth);
+
+  /* 4 Carved Pillars */
+  const pGeo = new THREE.CylinderGeometry(0.18 * s, 0.22 * s, 3.8 * s, 10);
+  [-1.4, 1.4].forEach(px => {
+    [-1.4, 1.4].forEach(pz => {
+      const pMesh = new THREE.Mesh(pGeo, sandstone);
+      pMesh.position.set(px * s, 2.7 * s, pz * s);
+      g.add(pMesh);
+    });
+  });
+
+  /* Chhatri Cornice & Carved Chhajja */
+  const cornice = new THREE.Mesh(new THREE.BoxGeometry(4.6 * s, 0.45 * s, 4.6 * s), sandstone);
+  cornice.position.y = 4.8 * s;
+  g.add(cornice);
+
+  /* Stone Dome (Cupola / Chhatri Dome) */
+  const domeGeo = new THREE.SphereGeometry(2.1 * s, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.5);
+  const dome = new THREE.Mesh(domeGeo, redstone);
+  dome.position.y = 5.0 * s;
+  g.add(dome);
+
+  /* Brass Kalasha Finial on Dome Top */
+  const kalash = new THREE.Mesh(new THREE.SphereGeometry(0.42 * s, 10, 10), brass);
+  kalash.position.y = 7.3 * s;
+  g.add(kalash);
+
+  /* Warm Aarti light inside Chhatri */
+  const innerLight = new THREE.PointLight(0xff9922, 1.6, 12, 1.5);
+  innerLight.position.y = 3.0 * s;
+  g.add(innerLight);
+
+  g.position.set(x, 0, z);
+  scene.add(g);
   return g;
 }
 
@@ -3427,19 +3410,14 @@ function queue() { TIMER ? setTimeout(() => frame(performance.now()), 16) : requ
 /* ======================================================== 14 · booting */
 const JOBS = [
   ['Reading the type', () => { if (document.fonts && document.fonts.load) { return Promise.race([document.fonts.load('600 320px Wordmark'), new Promise(r => setTimeout(r, 400))]); } }],
-  ['Pouring the ground', () => { initGL(); WORLD.uT = { value: 0 }; buildRig(); buildLights(); }],
-  ['Cutting the approach', () => buildShell()],
-  ['Raising the hall', () => buildTemple()],
-  ['Hanging the moon', () => buildMoon()],
-  ['Setting the gate', () => buildTorii()],
-  ['Placing the stones', () => {
+  ['Pouring the ghat foundation', () => { initGL(); WORLD.uT = { value: 0 }; buildRig(); buildLights(); }],
+  ['Carving the sandstone approach', () => buildShell()],
+  ['Raising the grand mandapa', () => buildTemple()],
+  ['Hanging the full moon', () => buildMoon()],
+  ['Erecting the stone torana', () => buildTorii()],
+  ['Lighting the deepastambhas & diyas', () => {
     buildRocks();
     buildLantern(7.4, -7.0, 1.15); buildLantern(-7.6, -5.2, 1.0);
-    /* The pairs flanking the flight were given flat heights — 2 and PODIUM —
-       and the flight does not reach either at those depths, so both pairs hung
-       in the air. Solve the step under each one from the same constants the
-       treads and cheeks are built from, and they stand on the rail instead of
-       beside it. */
     const stepAt   = z => Math.max(0, (STAIR_Z0 - z) / STAIR_RUN - .5);
     const cheekTop = z => (stepAt(z) + 1) * (PODIUM / STEPS) + .45;
     const cheekX   = z => (STAIR_W + (STEPS - stepAt(z)) * .052) / 2 + .45;
@@ -3449,25 +3427,22 @@ const JOBS = [
       buildLantern(-cheekX(z), z, sc, cheekTop(z));
     });
   }],
-  ['Growing the maples', () => {
-    buildMaple(71, 12.6, -13.0, 1.05); buildMaple(72, -11.8, -9.4, .95);
-    buildMaple(73, 9.2, -19.0, .82);   buildMaple(74, -14.5, -17.5, 1.0);
-    buildMaple(75, 16.5, -6.0, .88);
+  ['Raising the carved chhatris', () => {
+    buildMaple(71, 13.5, -13.0, 1.05); buildMaple(72, -12.5, -9.4, .95);
+    buildMaple(73, 10.2, -19.0, .85); buildMaple(74, -15.2, -17.5, 1.0);
+    buildMaple(75, 17.5, -6.0, .90);
   }],
-  ['Painting the near grass', () => buildForeground()],
-  ['Cutting the word', () => buildWordmark()],
-  ['Raising the mist', () => { buildAtmosphere(); buildLeafFall(); buildWisps(); }],
-  ['Polishing the water', () => {
+  ['Painting the sacred peepal foliage', () => buildForeground()],
+  ['Sculpting the monolithic wordmark', () => buildWordmark()],
+  ['Kindling the aarti flames & embers', () => { buildAtmosphere(); buildLeafFall(); buildWisps(); }],
+  ['Polishing the river water', () => {
     initPost(); buildCards(); buildCardCloth();
     WORLD.fg.forEach(m => m.layers.set(1));
     WORD.glyphs.forEach(m => m.layers.set(2));
     if (WORLD.rain) WORLD.rain.layers.set(1);
-    /* the fall is all around the rig, including behind it — mirroring it
-       would drop leaves into the water that are nowhere near the water */
     if (WORLD.leaves) WORLD.leaves.mesh.layers.set(1);
     WORLD.ripples.forEach(r => r.layers.set(1));
     layoutWord(); measure();
-    /* nothing that casts a shadow ever moves, so bake it once */
     if (WANT_SHADOW && WORLD.key) { WORLD.key.shadow.autoUpdate = false; WORLD.key.shadow.needsUpdate = true; }
   }]
 ];

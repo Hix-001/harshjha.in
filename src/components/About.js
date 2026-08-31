@@ -4,7 +4,7 @@ export function renderAbout() {
       <div class="sec-head">
         <span class="k"><b>01</b> / ABOUT ME</span>
         <span class="rule"></span>
-        <span class="k jp">संरचना · THE FRACTAL APPROACH</span>
+        <span class="k jp">साधना · THE DISCIPLINE</span>
       </div>
       <div class="gate-grid">
         <div>
@@ -14,19 +14,19 @@ export function renderAbout() {
         </div>
         <div class="gate-copy">
           <p class="lead" data-rv="up">
-            Like the recursive symmetry of ancient Indian stepwells, computing is an art of layering foundational logic into grand, harmonious architectures.
-          </p>
-          <p class="body" data-rv="up">
             As a 2nd year Computer Science & Engineering undergraduate, I immerse myself in the core principles of computation — mastering Data Structures & Algorithms, Object-Oriented paradigms, and modern system design.
           </p>
           <p class="body" data-rv="up">
             From crafting high-framerate WebGL shaders and interactive 3D graphics to building robust backend microservices with scalable databases, I strive for clean, elegant, and maintainable software.
           </p>
+          <p class="body" data-rv="up">
+            Whether architecting scalable backend APIs, optimizing rendering pipelines, or tackling competitive algorithmic challenges, I am constantly learning, shipping, and refining my technical craft.
+          </p>
           <a href="https://github.com/Hix-001" target="_blank" rel="noreferrer" class="arrowlink" data-rv="up">
             <span>Explore GitHub Profile</span>
             <span class="ar">
               <svg viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2.5 10.5L10.5 2.5M10.5 2.5H4.5M10.5 2.5V8.5" stroke="#d8b18a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2.5 10.5L10.5 2.5M10.5 2.5H4.5M10.5 2.5V8.5" stroke="#d6b28d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
           </a>
